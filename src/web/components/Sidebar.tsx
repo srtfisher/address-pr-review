@@ -73,7 +73,10 @@ export function Sidebar({ groups, state, selectedId, onSelect, filter, onFilter,
               <ul>
                 {group.items.map((item) => {
                   const status = statusOf(state.items[item.id]!);
-                  const icon = statusIcon[status];
+                  const icon =
+                    item.kind === 'summary' && status === 'skip'
+                      ? { icon: 'comment' as const, className: 'text-fg-muted', label: 'Optional' }
+                      : statusIcon[status];
                   const selected = item.id === selectedId;
                   const author = authorOf(item);
                   const line = lineLabel(item);
