@@ -1,0 +1,37 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: read
+  id-token: write
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 24
+          cache: npm
+          registry-url: https://registry.npmjs.org
+      - run: npm ci
+      - run: npm run typecheck
+      - run: npm test
+      - run: npm run build
+      - name: Committed build matches the source
+        run: |
+          if [ -n "$(git status --porcelain -- skills/code-review-feedback/app)" ]; then
+            echo "::error::skills/code-review-feedback/app is out of date. Run npm run build and commit the result."
+            exit 1
+          fi
+      - name: Tag matches package.json
+        run: |
+          if [ "v$(node -p "require('./package.json').version")" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match package.json version."
+            exit 1
+          fi
+      - run: npm publish --access public

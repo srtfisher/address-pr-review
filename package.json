@@ -1,10 +1,27 @@
 {
   "name": "code-review-feedback",
   "version": "0.1.0",
-  "private": true,
   "description": "An agent skill and local web app for answering pull request review feedback, with a human approving every reply.",
   "license": "MIT",
+  "author": "Sean Fisher <sean@alley.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/srtfisher/code-review-feedback.git"
+  },
+  "keywords": [
+    "code-review",
+    "pull-request",
+    "github",
+    "agent-skill",
+    "claude-code"
+  ],
   "type": "module",
+  "bin": {
+    "code-review-feedback": "skills/code-review-feedback/app/cli.mjs"
+  },
+  "files": [
+    "skills/code-review-feedback"
+  ],
   "engines": {
     "node": ">=20"
   },
