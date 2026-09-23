@@ -1,0 +1,292 @@
+{
+  "version": 1,
+  "pr": {
+    "owner": "acme",
+    "repo": "storefront",
+    "number": 482
+  },
+  "items": [
+    {
+      "id": "thread-7000100",
+      "kind": "thread",
+      "commentId": 7000100,
+      "lastSeenCommentId": 7000100,
+      "decision": "implemented",
+      "rationale": "Checked src/checkout/cart-summary.tsx:12 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c3d"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000101",
+      "kind": "thread",
+      "commentId": 7000101,
+      "lastSeenCommentId": 7000102,
+      "decision": "implemented",
+      "rationale": "Checked src/checkout/cart-summary.tsx:35 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c3e"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000103",
+      "kind": "thread",
+      "commentId": 7000103,
+      "lastSeenCommentId": 7000103,
+      "decision": "declined",
+      "rationale": "Verified against the code: the suggestion would change behavior other callers depend on.",
+      "commits": [],
+      "draft": "I'd rather leave this one as is for now."
+    },
+    {
+      "id": "thread-7000104",
+      "kind": "thread",
+      "commentId": 7000104,
+      "lastSeenCommentId": 7000104,
+      "decision": "clarify",
+      "rationale": "Could not tell which case they mean from the comment alone.",
+      "commits": [],
+      "draft": "Can you say a bit more about the case you have in mind?"
+    },
+    {
+      "id": "thread-7000106",
+      "kind": "thread",
+      "commentId": 7000106,
+      "lastSeenCommentId": 7000106,
+      "decision": "implemented",
+      "rationale": "Checked src/checkout/use-cart.ts:7 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c41"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000107",
+      "kind": "thread",
+      "commentId": 7000107,
+      "lastSeenCommentId": 7000107,
+      "decision": "implemented",
+      "rationale": "Checked src/checkout/use-cart.ts:45 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c42"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000108",
+      "kind": "thread",
+      "commentId": 7000108,
+      "lastSeenCommentId": 7000109,
+      "decision": "implemented",
+      "rationale": "Checked src/checkout/use-cart.ts:81 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c43"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000110",
+      "kind": "thread",
+      "commentId": 7000110,
+      "lastSeenCommentId": 7000110,
+      "decision": "declined",
+      "rationale": "Verified against the code: the suggestion would change behavior other callers depend on.",
+      "commits": [],
+      "draft": "I'd rather leave this one as is for now."
+    },
+    {
+      "id": "thread-7000111",
+      "kind": "thread",
+      "commentId": 7000111,
+      "lastSeenCommentId": 7000111,
+      "decision": "implemented",
+      "rationale": "Checked src/checkout/shipping-options.tsx:60 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c45"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000112",
+      "kind": "thread",
+      "commentId": 7000112,
+      "lastSeenCommentId": 7000112,
+      "decision": "implemented",
+      "rationale": "Checked src/checkout/shipping-options.tsx:110 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c46"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000113",
+      "kind": "thread",
+      "commentId": 7000113,
+      "lastSeenCommentId": 7000113,
+      "decision": "acknowledged",
+      "rationale": "A reasonable style note that does not need a change here.",
+      "commits": [],
+      "draft": "Fair, will keep that in mind."
+    },
+    {
+      "id": "thread-7000114",
+      "kind": "thread",
+      "commentId": 7000114,
+      "lastSeenCommentId": 7000115,
+      "decision": "declined",
+      "rationale": "Verified against the code: the suggestion would change behavior other callers depend on.",
+      "commits": [],
+      "draft": "I'd rather leave this one as is for now."
+    },
+    {
+      "id": "thread-7000116",
+      "kind": "thread",
+      "commentId": 7000116,
+      "lastSeenCommentId": 7000116,
+      "decision": "implemented",
+      "rationale": "Checked src/lib/money.ts:40 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c49"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000117",
+      "kind": "thread",
+      "commentId": 7000117,
+      "lastSeenCommentId": 7000117,
+      "decision": "clarify",
+      "rationale": "Could not tell which case they mean from the comment alone.",
+      "commits": [],
+      "draft": "Can you say a bit more about the case you have in mind?"
+    },
+    {
+      "id": "thread-7000118",
+      "kind": "thread",
+      "commentId": 7000118,
+      "lastSeenCommentId": 7000118,
+      "decision": "implemented",
+      "rationale": "Checked src/lib/tax/rates.ts:55 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c4b"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000119",
+      "kind": "thread",
+      "commentId": 7000119,
+      "lastSeenCommentId": 7000119,
+      "decision": "implemented",
+      "rationale": "Checked src/api/orders/create.ts:22 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c4c"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000120",
+      "kind": "thread",
+      "commentId": 7000120,
+      "lastSeenCommentId": 7000121,
+      "decision": "implemented",
+      "rationale": "Checked src/api/orders/create.ts:77 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c4d"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000122",
+      "kind": "thread",
+      "commentId": 7000122,
+      "lastSeenCommentId": 7000122,
+      "decision": "declined",
+      "rationale": "Verified against the code: the suggestion would change behavior other callers depend on.",
+      "commits": [],
+      "draft": "I'd rather leave this one as is for now."
+    },
+    {
+      "id": "thread-7000123",
+      "kind": "thread",
+      "commentId": 7000123,
+      "lastSeenCommentId": 7000123,
+      "decision": "implemented",
+      "rationale": "Checked src/components/price-tag.tsx:18 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c4f"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000124",
+      "kind": "thread",
+      "commentId": 7000124,
+      "lastSeenCommentId": 7000124,
+      "decision": "implemented",
+      "rationale": "Checked tests/checkout/cart-summary.test.tsx:40 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c50"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "thread-7000125",
+      "kind": "thread",
+      "commentId": 7000125,
+      "lastSeenCommentId": 7000125,
+      "decision": "declined",
+      "rationale": "Verified against the code: the suggestion would change behavior other callers depend on.",
+      "commits": [],
+      "draft": "I'd rather leave this one as is for now."
+    },
+    {
+      "id": "thread-7000126",
+      "kind": "thread",
+      "commentId": 7000126,
+      "lastSeenCommentId": 7000127,
+      "decision": "implemented",
+      "rationale": "Checked docs/checkout.md:12 and the reviewer is right. Changed it and ran the checkout tests.",
+      "commits": [
+        "a1b2c52"
+      ],
+      "draft": "Good catch, fixed."
+    },
+    {
+      "id": "comment-7000129",
+      "kind": "comment",
+      "commentId": 7000129,
+      "lastSeenCommentId": 7000130,
+      "decision": "acknowledged",
+      "rationale": "Process feedback, nothing to change in this PR.",
+      "commits": [],
+      "draft": "@priya-s yeah, fair. I will split things like that up next time."
+    },
+    {
+      "id": "comment-7000130",
+      "kind": "comment",
+      "commentId": 7000130,
+      "lastSeenCommentId": 7000130,
+      "decision": "implemented",
+      "rationale": "Reproduced in Safari: the radio inputs had no explicit size. Fixed in the shipping options styles.",
+      "commits": [
+        "b7e91f0"
+      ],
+      "draft": "@sam-oyelaran good call, Safari was sizing the radios differently. Fixed."
+    },
+    {
+      "id": "review-7000131",
+      "kind": "review",
+      "commentId": 7000131,
+      "decision": "implemented",
+      "rationale": "Covered by the inline threads on money.ts and cart-summary.tsx.",
+      "commits": [],
+      "draft": "@jordan-k thanks, the cents fix is in. I left the rounding as is, reasoning is in the thread."
+    }
+  ],
+  "summary": {
+    "draft": "Thanks all. Most of this is fixed; I pushed back on the rounding and the schema location, details in the threads."
+  }
+}

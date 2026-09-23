@@ -1,0 +1,2 @@
+skills/code-review-feedback/app/** linguist-generated=true -diff
+test/fixtures/large-pr/*.json linguist-generated=true

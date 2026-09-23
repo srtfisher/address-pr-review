@@ -1,0 +1,34 @@
+{
+  "name": "code-review-feedback",
+  "version": "0.1.0",
+  "private": true,
+  "description": "An agent skill and local web app for answering pull request review feedback, with a human approving every reply.",
+  "license": "MIT",
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "build": "npm run build:web && npm run build:server",
+    "build:web": "vite build",
+    "build:server": "esbuild src/server/cli.ts --bundle --platform=node --format=esm --target=node20 --outfile=skills/code-review-feedback/app/cli.mjs --banner:js='#!/usr/bin/env node' --minify --legal-comments=none",
+    "dev": "npm run build && node skills/code-review-feedback/app/cli.mjs open test/fixtures/large-pr/drafts.json --fixture test/fixtures/large-pr",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.3",
+    "@types/node": "^26.6.2",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "esbuild": "^0.28.2",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "tailwindcss": "^4.3.3",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.0",
+    "vitest": "^5.0.1",
+    "zod": "^4.6.5"
+  }
+}

@@ -1,0 +1,817 @@
+{
+  "pr": {
+    "owner": "acme",
+    "repo": "storefront",
+    "number": 482,
+    "title": "Rework checkout totals and add shipping options",
+    "url": "https://github.com/acme/storefront/pull/482",
+    "headRefName": "checkout-totals",
+    "baseRefName": "main",
+    "author": {
+      "login": "maya-dev",
+      "name": "Maya Chen",
+      "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(68%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E"
+    },
+    "threads": [
+      {
+        "id": "PRRT_fixture0",
+        "path": "src/checkout/cart-summary.tsx",
+        "line": 12,
+        "startLine": null,
+        "originalLine": 12,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,120 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(0, 2);\n+  if (!cart0.items.length) return null;\n+  const value4 = computeLine(0, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(0, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(0, 11);\n+  if (!cart0.items.length) return null;",
+        "comments": [
+          {
+            "id": 7000100,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Should this stay in cents here? `formatPrice` expects a number of cents, not dollars.",
+            "bodyHTML": "<p>Should this stay in cents here? <code>formatPrice</code> expects a number of cents, not dollars.</p>",
+            "createdAt": "2026-09-21T14:00:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000100"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture1",
+        "path": "src/checkout/cart-summary.tsx",
+        "line": 35,
+        "startLine": null,
+        "originalLine": 35,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,120 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(0, 2);\n+  if (!cart0.items.length) return null;\n+  const value4 = computeLine(0, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(0, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(0, 11);\n+  if (!cart0.items.length) return null;\n+  const value13 = computeLine(0, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(0, 16);\n+  const value17 = computeLine(0, 17);\n+\n+  const value19 = computeLine(0, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(0, 22);\n+  const value23 = computeLine(0, 23);\n+  if (!cart0.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(0, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(0, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(0, 31);\n+  const value32 = computeLine(0, 32);\n+  if (!cart0.items.length) return null;\n+  const value34 = computeLine(0, 34);\n+  // step 35: keep totals in cents until the very end",
+        "comments": [
+          {
+            "id": 7000101,
+            "author": {
+              "login": "priya-s",
+              "name": "Priya Shah",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Nit: `subtotal35` is unused now.",
+            "bodyHTML": "<p>Nit: <code>subtotal35</code> is unused now.</p>",
+            "createdAt": "2026-09-21T14:03:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000101"
+          },
+          {
+            "id": 7000102,
+            "author": {
+              "login": "maya-dev",
+              "name": "Maya Chen",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(68%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Hmm, let me look.",
+            "bodyHTML": "<p>Hmm, let me look.</p>",
+            "createdAt": "2026-09-21T14:04:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000102"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture2",
+        "path": "src/checkout/cart-summary.tsx",
+        "line": 64,
+        "startLine": null,
+        "originalLine": 64,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,120 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(0, 2);\n+  if (!cart0.items.length) return null;\n+  const value4 = computeLine(0, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(0, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(0, 11);\n+  if (!cart0.items.length) return null;\n+  const value13 = computeLine(0, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(0, 16);\n+  const value17 = computeLine(0, 17);\n+\n+  const value19 = computeLine(0, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(0, 22);\n+  const value23 = computeLine(0, 23);\n+  if (!cart0.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(0, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(0, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(0, 31);\n+  const value32 = computeLine(0, 32);\n+  if (!cart0.items.length) return null;\n+  const value34 = computeLine(0, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(0, 37);\n+  const value38 = computeLine(0, 38);\n+  if (!cart0.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(0, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(0, 43);\n+  const value44 = computeLine(0, 44);\n+\n+  const value46 = computeLine(0, 46);\n+  const value47 = computeLine(0, 47);\n+  if (!cart0.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  const value52 = computeLine(0, 52);\n+  const value53 = computeLine(0, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart0.items.length) return null;\n+  const value58 = computeLine(0, 58);\n+  const value59 = computeLine(0, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(0, 61);\n+  const value62 = computeLine(0, 62);\n+\n+  const value64 = computeLine(0, 64);",
+        "comments": [
+          {
+            "id": 7000103,
+            "author": {
+              "login": "sam-oyelaran",
+              "name": "Sam Oyelaran",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "This recomputes the subtotal on every render. Can we memo it?",
+            "bodyHTML": "<p>This recomputes the subtotal on every render. Can we memo it?</p>",
+            "createdAt": "2026-09-21T14:06:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000103"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture3",
+        "path": "src/checkout/cart-summary.tsx",
+        "line": 98,
+        "startLine": null,
+        "originalLine": 98,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,120 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(0, 2);\n+  if (!cart0.items.length) return null;\n+  const value4 = computeLine(0, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(0, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(0, 11);\n+  if (!cart0.items.length) return null;\n+  const value13 = computeLine(0, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(0, 16);\n+  const value17 = computeLine(0, 17);\n+\n+  const value19 = computeLine(0, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(0, 22);\n+  const value23 = computeLine(0, 23);\n+  if (!cart0.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(0, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(0, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(0, 31);\n+  const value32 = computeLine(0, 32);\n+  if (!cart0.items.length) return null;\n+  const value34 = computeLine(0, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(0, 37);\n+  const value38 = computeLine(0, 38);\n+  if (!cart0.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(0, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(0, 43);\n+  const value44 = computeLine(0, 44);\n+\n+  const value46 = computeLine(0, 46);\n+  const value47 = computeLine(0, 47);\n+  if (!cart0.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  const value52 = computeLine(0, 52);\n+  const value53 = computeLine(0, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart0.items.length) return null;\n+  const value58 = computeLine(0, 58);\n+  const value59 = computeLine(0, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(0, 61);\n+  const value62 = computeLine(0, 62);\n+\n+  const value64 = computeLine(0, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  const value67 = computeLine(0, 67);\n+  const value68 = computeLine(0, 68);\n+  if (!cart0.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(0, 71);\n+\n+  const value73 = computeLine(0, 73);\n+  const value74 = computeLine(0, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(0, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart0.items.length) return null;\n+  const value79 = computeLine(0, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(0, 82);\n+  const value83 = computeLine(0, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(0, 86);\n+  if (!cart0.items.length) return null;\n+  const value88 = computeLine(0, 88);\n+  const value89 = computeLine(0, 89);\n+\n+  // step 91: keep totals in cents until the very end\n+  const value92 = computeLine(0, 92);\n+  if (!cart0.items.length) return null;\n+  const value94 = computeLine(0, 94);\n+  const subtotal95 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  const value97 = computeLine(0, 97);\n+  // step 98: keep totals in cents until the very end",
+        "comments": [
+          {
+            "id": 7000104,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "What happens when the cart is empty and a coupon is applied? I don't see a guard.",
+            "bodyHTML": "<p>What happens when the cart is empty and a coupon is applied? I don't see a guard.</p>",
+            "createdAt": "2026-09-21T14:09:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000104"
+          },
+          {
+            "id": 7000105,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Also, the same thing happens on the mini cart.",
+            "bodyHTML": "<p>Also, the same thing happens on the mini cart.</p>",
+            "createdAt": "2026-09-21T14:11:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000105"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture4",
+        "path": "src/checkout/use-cart.ts",
+        "line": 7,
+        "startLine": null,
+        "originalLine": 7,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,90 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(1, 2);\n+  if (!cart1.items.length) return null;\n+  const value4 = computeLine(1, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart1.items.length) return null;\n+  // step 7: keep totals in cents until the very end",
+        "comments": [
+          {
+            "id": 7000106,
+            "author": {
+              "login": "priya-s",
+              "name": "Priya Shah",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Can we keep the hook name matching the file? `useCart` vs `useCartState`.",
+            "bodyHTML": "<p>Can we keep the hook name matching the file? <code>useCart</code> vs <code>useCartState</code>.</p>",
+            "createdAt": "2026-09-21T14:12:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000106"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture5",
+        "path": "src/checkout/use-cart.ts",
+        "line": 45,
+        "startLine": null,
+        "originalLine": 45,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,90 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(1, 2);\n+  if (!cart1.items.length) return null;\n+  const value4 = computeLine(1, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart1.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(1, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(1, 11);\n+  if (!cart1.items.length) return null;\n+  const value13 = computeLine(1, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(1, 16);\n+  const value17 = computeLine(1, 17);\n+\n+  const value19 = computeLine(1, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(1, 22);\n+  const value23 = computeLine(1, 23);\n+  if (!cart1.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(1, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(1, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(1, 31);\n+  const value32 = computeLine(1, 32);\n+  if (!cart1.items.length) return null;\n+  const value34 = computeLine(1, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(1, 37);\n+  const value38 = computeLine(1, 38);\n+  if (!cart1.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(1, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(1, 43);\n+  const value44 = computeLine(1, 44);\n+",
+        "comments": [
+          {
+            "id": 7000107,
+            "author": {
+              "login": "sam-oyelaran",
+              "name": "Sam Oyelaran",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "This effect has no cleanup, so the subscription leaks when the drawer closes.",
+            "bodyHTML": "<p>This effect has no cleanup, so the subscription leaks when the drawer closes.</p>",
+            "createdAt": "2026-09-21T14:15:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000107"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture6",
+        "path": "src/checkout/use-cart.ts",
+        "line": null,
+        "startLine": null,
+        "originalLine": 81,
+        "isOutdated": true,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,90 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(1, 2);\n+  if (!cart1.items.length) return null;\n+  const value4 = computeLine(1, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart1.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(1, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(1, 11);\n+  if (!cart1.items.length) return null;\n+  const value13 = computeLine(1, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(1, 16);\n+  const value17 = computeLine(1, 17);\n+\n+  const value19 = computeLine(1, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(1, 22);\n+  const value23 = computeLine(1, 23);\n+  if (!cart1.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(1, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(1, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(1, 31);\n+  const value32 = computeLine(1, 32);\n+  if (!cart1.items.length) return null;\n+  const value34 = computeLine(1, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(1, 37);\n+  const value38 = computeLine(1, 38);\n+  if (!cart1.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(1, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(1, 43);\n+  const value44 = computeLine(1, 44);\n+\n+  const value46 = computeLine(1, 46);\n+  const value47 = computeLine(1, 47);\n+  if (!cart1.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart1.items.length) return null;\n+  const value52 = computeLine(1, 52);\n+  const value53 = computeLine(1, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart1.items.length) return null;\n+  const value58 = computeLine(1, 58);\n+  const value59 = computeLine(1, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(1, 61);\n+  const value62 = computeLine(1, 62);\n+\n+  const value64 = computeLine(1, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart1.items.length) return null;\n+  const value67 = computeLine(1, 67);\n+  const value68 = computeLine(1, 68);\n+  if (!cart1.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(1, 71);\n+\n+  const value73 = computeLine(1, 73);\n+  const value74 = computeLine(1, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(1, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart1.items.length) return null;\n+  const value79 = computeLine(1, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+",
+        "comments": [
+          {
+            "id": 7000108,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Why is this `any`?",
+            "bodyHTML": "<p>Why is this <code>any</code>?</p>",
+            "createdAt": "2026-09-21T14:18:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000108"
+          },
+          {
+            "id": 7000109,
+            "author": {
+              "login": "maya-dev",
+              "name": "Maya Chen",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(68%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Hmm, let me look.",
+            "bodyHTML": "<p>Hmm, let me look.</p>",
+            "createdAt": "2026-09-21T14:19:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000109"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture7",
+        "path": "src/checkout/shipping-options.tsx",
+        "line": 20,
+        "startLine": null,
+        "originalLine": 20,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,140 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(2, 2);\n+  if (!cart2.items.length) return null;\n+  const value4 = computeLine(2, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(2, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(2, 11);\n+  if (!cart2.items.length) return null;\n+  const value13 = computeLine(2, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(2, 16);\n+  const value17 = computeLine(2, 17);\n+\n+  const value19 = computeLine(2, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000110,
+            "author": {
+              "login": "priya-s",
+              "name": "Priya Shah",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Could we sort shipping options by price by default?",
+            "bodyHTML": "<p>Could we sort shipping options by price by default?</p>",
+            "createdAt": "2026-09-21T14:21:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000110"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture8",
+        "path": "src/checkout/shipping-options.tsx",
+        "line": 60,
+        "startLine": null,
+        "originalLine": 60,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,140 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(2, 2);\n+  if (!cart2.items.length) return null;\n+  const value4 = computeLine(2, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(2, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(2, 11);\n+  if (!cart2.items.length) return null;\n+  const value13 = computeLine(2, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(2, 16);\n+  const value17 = computeLine(2, 17);\n+\n+  const value19 = computeLine(2, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(2, 22);\n+  const value23 = computeLine(2, 23);\n+  if (!cart2.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(2, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(2, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(2, 31);\n+  const value32 = computeLine(2, 32);\n+  if (!cart2.items.length) return null;\n+  const value34 = computeLine(2, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(2, 37);\n+  const value38 = computeLine(2, 38);\n+  if (!cart2.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(2, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(2, 43);\n+  const value44 = computeLine(2, 44);\n+\n+  const value46 = computeLine(2, 46);\n+  const value47 = computeLine(2, 47);\n+  if (!cart2.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value52 = computeLine(2, 52);\n+  const value53 = computeLine(2, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart2.items.length) return null;\n+  const value58 = computeLine(2, 58);\n+  const value59 = computeLine(2, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000111,
+            "author": {
+              "login": "sam-oyelaran",
+              "name": "Sam Oyelaran",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "The label should come from the carrier, not be hardcoded.",
+            "bodyHTML": "<p>The label should come from the carrier, not be hardcoded.</p>",
+            "createdAt": "2026-09-21T14:24:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000111"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture9",
+        "path": "src/checkout/shipping-options.tsx",
+        "line": 110,
+        "startLine": 107,
+        "originalLine": 110,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,140 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(2, 2);\n+  if (!cart2.items.length) return null;\n+  const value4 = computeLine(2, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(2, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(2, 11);\n+  if (!cart2.items.length) return null;\n+  const value13 = computeLine(2, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(2, 16);\n+  const value17 = computeLine(2, 17);\n+\n+  const value19 = computeLine(2, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(2, 22);\n+  const value23 = computeLine(2, 23);\n+  if (!cart2.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(2, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(2, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(2, 31);\n+  const value32 = computeLine(2, 32);\n+  if (!cart2.items.length) return null;\n+  const value34 = computeLine(2, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(2, 37);\n+  const value38 = computeLine(2, 38);\n+  if (!cart2.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(2, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(2, 43);\n+  const value44 = computeLine(2, 44);\n+\n+  const value46 = computeLine(2, 46);\n+  const value47 = computeLine(2, 47);\n+  if (!cart2.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value52 = computeLine(2, 52);\n+  const value53 = computeLine(2, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart2.items.length) return null;\n+  const value58 = computeLine(2, 58);\n+  const value59 = computeLine(2, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(2, 61);\n+  const value62 = computeLine(2, 62);\n+\n+  const value64 = computeLine(2, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value67 = computeLine(2, 67);\n+  const value68 = computeLine(2, 68);\n+  if (!cart2.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(2, 71);\n+\n+  const value73 = computeLine(2, 73);\n+  const value74 = computeLine(2, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(2, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart2.items.length) return null;\n+  const value79 = computeLine(2, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(2, 82);\n+  const value83 = computeLine(2, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(2, 86);\n+  if (!cart2.items.length) return null;\n+  const value88 = computeLine(2, 88);\n+  const value89 = computeLine(2, 89);\n+\n+  // step 91: keep totals in cents until the very end\n+  const value92 = computeLine(2, 92);\n+  if (!cart2.items.length) return null;\n+  const value94 = computeLine(2, 94);\n+  const subtotal95 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value97 = computeLine(2, 97);\n+  // step 98: keep totals in cents until the very end\n+\n+  const subtotal100 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value101 = computeLine(2, 101);\n+  if (!cart2.items.length) return null;\n+  const value103 = computeLine(2, 103);\n+  const value104 = computeLine(2, 104);\n+  // step 105: keep totals in cents until the very end\n+  const value106 = computeLine(2, 106);\n+  const value107 = computeLine(2, 107);\n+\n+  const value109 = computeLine(2, 109);\n+  const subtotal110 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000112,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Missing an aria-label on the radio group.",
+            "bodyHTML": "<p>Missing an aria-label on the radio group.</p>",
+            "createdAt": "2026-09-21T14:27:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000112"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture10",
+        "path": "src/checkout/shipping-options.tsx",
+        "line": 133,
+        "startLine": null,
+        "originalLine": 133,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,140 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(2, 2);\n+  if (!cart2.items.length) return null;\n+  const value4 = computeLine(2, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(2, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(2, 11);\n+  if (!cart2.items.length) return null;\n+  const value13 = computeLine(2, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(2, 16);\n+  const value17 = computeLine(2, 17);\n+\n+  const value19 = computeLine(2, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(2, 22);\n+  const value23 = computeLine(2, 23);\n+  if (!cart2.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(2, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(2, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(2, 31);\n+  const value32 = computeLine(2, 32);\n+  if (!cart2.items.length) return null;\n+  const value34 = computeLine(2, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(2, 37);\n+  const value38 = computeLine(2, 38);\n+  if (!cart2.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(2, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(2, 43);\n+  const value44 = computeLine(2, 44);\n+\n+  const value46 = computeLine(2, 46);\n+  const value47 = computeLine(2, 47);\n+  if (!cart2.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value52 = computeLine(2, 52);\n+  const value53 = computeLine(2, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart2.items.length) return null;\n+  const value58 = computeLine(2, 58);\n+  const value59 = computeLine(2, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(2, 61);\n+  const value62 = computeLine(2, 62);\n+\n+  const value64 = computeLine(2, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value67 = computeLine(2, 67);\n+  const value68 = computeLine(2, 68);\n+  if (!cart2.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(2, 71);\n+\n+  const value73 = computeLine(2, 73);\n+  const value74 = computeLine(2, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(2, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart2.items.length) return null;\n+  const value79 = computeLine(2, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(2, 82);\n+  const value83 = computeLine(2, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(2, 86);\n+  if (!cart2.items.length) return null;\n+  const value88 = computeLine(2, 88);\n+  const value89 = computeLine(2, 89);\n+\n+  // step 91: keep totals in cents until the very end\n+  const value92 = computeLine(2, 92);\n+  if (!cart2.items.length) return null;\n+  const value94 = computeLine(2, 94);\n+  const subtotal95 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value97 = computeLine(2, 97);\n+  // step 98: keep totals in cents until the very end\n+\n+  const subtotal100 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value101 = computeLine(2, 101);\n+  if (!cart2.items.length) return null;\n+  const value103 = computeLine(2, 103);\n+  const value104 = computeLine(2, 104);\n+  // step 105: keep totals in cents until the very end\n+  const value106 = computeLine(2, 106);\n+  const value107 = computeLine(2, 107);\n+\n+  const value109 = computeLine(2, 109);\n+  const subtotal110 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  // step 112: keep totals in cents until the very end\n+  const value113 = computeLine(2, 113);\n+  if (!cart2.items.length) return null;\n+  const subtotal115 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value116 = computeLine(2, 116);\n+\n+  const value118 = computeLine(2, 118);\n+  // step 119: keep totals in cents until the very end\n+  const subtotal120 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value121 = computeLine(2, 121);\n+  const value122 = computeLine(2, 122);\n+  if (!cart2.items.length) return null;\n+  const value124 = computeLine(2, 124);\n+  const subtotal125 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value127 = computeLine(2, 127);\n+  const value128 = computeLine(2, 128);\n+  if (!cart2.items.length) return null;\n+  const subtotal130 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value131 = computeLine(2, 131);\n+  if (!cart2.items.length) return null;\n+  // step 133: keep totals in cents until the very end",
+        "comments": [
+          {
+            "id": 7000113,
+            "author": {
+              "login": "priya-s",
+              "name": "Priya Shah",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "I think this can be a plain function instead of a component.",
+            "bodyHTML": "<p>I think this can be a plain function instead of a component.</p>",
+            "createdAt": "2026-09-21T14:30:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000113"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture11",
+        "path": "src/lib/money.ts",
+        "line": 15,
+        "startLine": null,
+        "originalLine": 15,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,60 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(3, 2);\n+  if (!cart3.items.length) return null;\n+  const value4 = computeLine(3, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart3.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(3, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(3, 11);\n+  if (!cart3.items.length) return null;\n+  const value13 = computeLine(3, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000114,
+            "author": {
+              "login": "sam-oyelaran",
+              "name": "Sam Oyelaran",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Rounding: this will be off by a cent for 0.5 values. Use banker’s rounding?",
+            "bodyHTML": "<p>Rounding: this will be off by a cent for 0.5 values. Use banker’s rounding?</p>",
+            "createdAt": "2026-09-21T14:33:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000114"
+          },
+          {
+            "id": 7000115,
+            "author": {
+              "login": "maya-dev",
+              "name": "Maya Chen",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(68%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Hmm, let me look.",
+            "bodyHTML": "<p>Hmm, let me look.</p>",
+            "createdAt": "2026-09-21T14:34:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000115"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture12",
+        "path": "src/lib/money.ts",
+        "line": 40,
+        "startLine": null,
+        "originalLine": 40,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,60 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(3, 2);\n+  if (!cart3.items.length) return null;\n+  const value4 = computeLine(3, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart3.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(3, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(3, 11);\n+  if (!cart3.items.length) return null;\n+  const value13 = computeLine(3, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(3, 16);\n+  const value17 = computeLine(3, 17);\n+\n+  const value19 = computeLine(3, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(3, 22);\n+  const value23 = computeLine(3, 23);\n+  if (!cart3.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(3, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(3, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(3, 31);\n+  const value32 = computeLine(3, 32);\n+  if (!cart3.items.length) return null;\n+  const value34 = computeLine(3, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(3, 37);\n+  const value38 = computeLine(3, 38);\n+  if (!cart3.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000116,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Please add a test for negative amounts.",
+            "bodyHTML": "<p>Please add a test for negative amounts.</p>",
+            "createdAt": "2026-09-21T14:36:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000116"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture13",
+        "path": "src/lib/tax/rates.ts",
+        "line": 10,
+        "startLine": null,
+        "originalLine": 10,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,80 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(4, 2);\n+  if (!cart4.items.length) return null;\n+  const value4 = computeLine(4, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart4.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(4, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000117,
+            "author": {
+              "login": "priya-s",
+              "name": "Priya Shah",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Where do these rates come from? A link in a comment would help.",
+            "bodyHTML": "<p>Where do these rates come from? A link in a comment would help.</p>",
+            "createdAt": "2026-09-21T14:39:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000117"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture14",
+        "path": "src/lib/tax/rates.ts",
+        "line": 55,
+        "startLine": null,
+        "originalLine": 55,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,80 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(4, 2);\n+  if (!cart4.items.length) return null;\n+  const value4 = computeLine(4, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart4.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(4, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(4, 11);\n+  if (!cart4.items.length) return null;\n+  const value13 = computeLine(4, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(4, 16);\n+  const value17 = computeLine(4, 17);\n+\n+  const value19 = computeLine(4, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(4, 22);\n+  const value23 = computeLine(4, 23);\n+  if (!cart4.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(4, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(4, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(4, 31);\n+  const value32 = computeLine(4, 32);\n+  if (!cart4.items.length) return null;\n+  const value34 = computeLine(4, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(4, 37);\n+  const value38 = computeLine(4, 38);\n+  if (!cart4.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(4, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(4, 43);\n+  const value44 = computeLine(4, 44);\n+\n+  const value46 = computeLine(4, 46);\n+  const value47 = computeLine(4, 47);\n+  if (!cart4.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart4.items.length) return null;\n+  const value52 = computeLine(4, 52);\n+  const value53 = computeLine(4, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000118,
+            "author": {
+              "login": "sam-oyelaran",
+              "name": "Sam Oyelaran",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Typo in the region code: `CA-QB` should be `CA-QC`.",
+            "bodyHTML": "<p>Typo in the region code: <code>CA-QB</code> should be <code>CA-QC</code>.</p>",
+            "createdAt": "2026-09-21T14:42:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000118"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture15",
+        "path": "src/api/orders/create.ts",
+        "line": 22,
+        "startLine": null,
+        "originalLine": 22,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,110 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(5, 2);\n+  if (!cart5.items.length) return null;\n+  const value4 = computeLine(5, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart5.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(5, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(5, 11);\n+  if (!cart5.items.length) return null;\n+  const value13 = computeLine(5, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(5, 16);\n+  const value17 = computeLine(5, 17);\n+\n+  const value19 = computeLine(5, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(5, 22);",
+        "comments": [
+          {
+            "id": 7000119,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "We should validate before creating the order, not after.",
+            "bodyHTML": "<p>We should validate before creating the order, not after.</p>",
+            "createdAt": "2026-09-21T14:45:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000119"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture16",
+        "path": "src/api/orders/create.ts",
+        "line": 77,
+        "startLine": null,
+        "originalLine": 77,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,110 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(5, 2);\n+  if (!cart5.items.length) return null;\n+  const value4 = computeLine(5, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart5.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(5, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(5, 11);\n+  if (!cart5.items.length) return null;\n+  const value13 = computeLine(5, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(5, 16);\n+  const value17 = computeLine(5, 17);\n+\n+  const value19 = computeLine(5, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(5, 22);\n+  const value23 = computeLine(5, 23);\n+  if (!cart5.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(5, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(5, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(5, 31);\n+  const value32 = computeLine(5, 32);\n+  if (!cart5.items.length) return null;\n+  const value34 = computeLine(5, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(5, 37);\n+  const value38 = computeLine(5, 38);\n+  if (!cart5.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(5, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(5, 43);\n+  const value44 = computeLine(5, 44);\n+\n+  const value46 = computeLine(5, 46);\n+  const value47 = computeLine(5, 47);\n+  if (!cart5.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart5.items.length) return null;\n+  const value52 = computeLine(5, 52);\n+  const value53 = computeLine(5, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart5.items.length) return null;\n+  const value58 = computeLine(5, 58);\n+  const value59 = computeLine(5, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(5, 61);\n+  const value62 = computeLine(5, 62);\n+\n+  const value64 = computeLine(5, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart5.items.length) return null;\n+  const value67 = computeLine(5, 67);\n+  const value68 = computeLine(5, 68);\n+  if (!cart5.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(5, 71);\n+\n+  const value73 = computeLine(5, 73);\n+  const value74 = computeLine(5, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(5, 76);\n+  // step 77: keep totals in cents until the very end",
+        "comments": [
+          {
+            "id": 7000120,
+            "author": {
+              "login": "priya-s",
+              "name": "Priya Shah",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "This swallows the error. Log it at least?",
+            "bodyHTML": "<p>This swallows the error. Log it at least?</p>",
+            "createdAt": "2026-09-21T14:48:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000120"
+          },
+          {
+            "id": 7000121,
+            "author": {
+              "login": "maya-dev",
+              "name": "Maya Chen",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(68%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Hmm, let me look.",
+            "bodyHTML": "<p>Hmm, let me look.</p>",
+            "createdAt": "2026-09-21T14:49:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000121"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture17",
+        "path": "src/api/orders/validate.ts",
+        "line": 30,
+        "startLine": null,
+        "originalLine": 30,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,70 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(6, 2);\n+  if (!cart6.items.length) return null;\n+  const value4 = computeLine(6, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart6.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(6, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(6, 11);\n+  if (!cart6.items.length) return null;\n+  const value13 = computeLine(6, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(6, 16);\n+  const value17 = computeLine(6, 17);\n+\n+  const value19 = computeLine(6, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(6, 22);\n+  const value23 = computeLine(6, 23);\n+  if (!cart6.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(6, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(6, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000122,
+            "author": {
+              "login": "sam-oyelaran",
+              "name": "Sam Oyelaran",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Can the schema live next to the route?",
+            "bodyHTML": "<p>Can the schema live next to the route?</p>",
+            "createdAt": "2026-09-21T14:51:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000122"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture18",
+        "path": "src/components/price-tag.tsx",
+        "line": 18,
+        "startLine": null,
+        "originalLine": 18,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,45 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(7, 2);\n+  if (!cart7.items.length) return null;\n+  const value4 = computeLine(7, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart7.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(7, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(7, 11);\n+  if (!cart7.items.length) return null;\n+  const value13 = computeLine(7, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(7, 16);\n+  const value17 = computeLine(7, 17);\n+",
+        "comments": [
+          {
+            "id": 7000123,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Screen readers will read \"$\" and the number separately here.",
+            "bodyHTML": "<p>Screen readers will read \"$\" and the number separately here.</p>",
+            "createdAt": "2026-09-21T14:54:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000123"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture19",
+        "path": "tests/checkout/cart-summary.test.tsx",
+        "line": 40,
+        "startLine": null,
+        "originalLine": 40,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,100 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(8, 2);\n+  if (!cart8.items.length) return null;\n+  const value4 = computeLine(8, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart8.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(8, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(8, 11);\n+  if (!cart8.items.length) return null;\n+  const value13 = computeLine(8, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(8, 16);\n+  const value17 = computeLine(8, 17);\n+\n+  const value19 = computeLine(8, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(8, 22);\n+  const value23 = computeLine(8, 23);\n+  if (!cart8.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(8, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(8, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(8, 31);\n+  const value32 = computeLine(8, 32);\n+  if (!cart8.items.length) return null;\n+  const value34 = computeLine(8, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(8, 37);\n+  const value38 = computeLine(8, 38);\n+  if (!cart8.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000124,
+            "author": {
+              "login": "priya-s",
+              "name": "Priya Shah",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "This test depends on the system timezone.",
+            "bodyHTML": "<p>This test depends on the system timezone.</p>",
+            "createdAt": "2026-09-21T14:57:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000124"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture20",
+        "path": "tests/checkout/cart-summary.test.tsx",
+        "line": 88,
+        "startLine": null,
+        "originalLine": 88,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,0 +1,100 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(8, 2);\n+  if (!cart8.items.length) return null;\n+  const value4 = computeLine(8, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart8.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(8, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(8, 11);\n+  if (!cart8.items.length) return null;\n+  const value13 = computeLine(8, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(8, 16);\n+  const value17 = computeLine(8, 17);\n+\n+  const value19 = computeLine(8, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(8, 22);\n+  const value23 = computeLine(8, 23);\n+  if (!cart8.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(8, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(8, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(8, 31);\n+  const value32 = computeLine(8, 32);\n+  if (!cart8.items.length) return null;\n+  const value34 = computeLine(8, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(8, 37);\n+  const value38 = computeLine(8, 38);\n+  if (!cart8.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(8, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(8, 43);\n+  const value44 = computeLine(8, 44);\n+\n+  const value46 = computeLine(8, 46);\n+  const value47 = computeLine(8, 47);\n+  if (!cart8.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart8.items.length) return null;\n+  const value52 = computeLine(8, 52);\n+  const value53 = computeLine(8, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart8.items.length) return null;\n+  const value58 = computeLine(8, 58);\n+  const value59 = computeLine(8, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(8, 61);\n+  const value62 = computeLine(8, 62);\n+\n+  const value64 = computeLine(8, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart8.items.length) return null;\n+  const value67 = computeLine(8, 67);\n+  const value68 = computeLine(8, 68);\n+  if (!cart8.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(8, 71);\n+\n+  const value73 = computeLine(8, 73);\n+  const value74 = computeLine(8, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(8, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart8.items.length) return null;\n+  const value79 = computeLine(8, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(8, 82);\n+  const value83 = computeLine(8, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(8, 86);\n+  if (!cart8.items.length) return null;\n+  const value88 = computeLine(8, 88);",
+        "comments": [
+          {
+            "id": 7000125,
+            "author": {
+              "login": "sam-oyelaran",
+              "name": "Sam Oyelaran",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Can we add a case for multiple currencies?",
+            "bodyHTML": "<p>Can we add a case for multiple currencies?</p>",
+            "createdAt": "2026-09-21T15:00:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000125"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture21",
+        "path": "docs/checkout.md",
+        "line": 12,
+        "startLine": null,
+        "originalLine": 12,
+        "isOutdated": false,
+        "isResolved": false,
+        "diffHunk": "@@ -1,2 +1,40 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(9, 2);\n+  if (!cart9.items.length) return null;\n+  const value4 = computeLine(9, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart9.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(9, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(9, 11);\n+  if (!cart9.items.length) return null;",
+        "comments": [
+          {
+            "id": 7000126,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "The doc still mentions the old endpoint.",
+            "bodyHTML": "<p>The doc still mentions the old endpoint.</p>",
+            "createdAt": "2026-09-21T15:03:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000126"
+          },
+          {
+            "id": 7000127,
+            "author": {
+              "login": "maya-dev",
+              "name": "Maya Chen",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(68%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Hmm, let me look.",
+            "bodyHTML": "<p>Hmm, let me look.</p>",
+            "createdAt": "2026-09-21T15:04:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000127"
+          }
+        ]
+      },
+      {
+        "id": "PRRT_fixture_resolved",
+        "path": "src/checkout/cart-summary.tsx",
+        "line": 5,
+        "startLine": null,
+        "originalLine": 5,
+        "isOutdated": false,
+        "isResolved": true,
+        "diffHunk": "@@ -1,2 +1,120 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(0, 2);\n+  if (!cart0.items.length) return null;\n+  const value4 = computeLine(0, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);",
+        "comments": [
+          {
+            "id": 7000128,
+            "author": {
+              "login": "jordan-k",
+              "name": "Jordan Kim",
+              "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+            },
+            "body": "Old nit, already handled.",
+            "bodyHTML": "<p>Old nit, already handled.</p>",
+            "createdAt": "2026-09-21T17:20:00.000Z",
+            "url": "https://github.com/acme/storefront/pull/482#discussion_r7000128"
+          }
+        ]
+      }
+    ],
+    "comments": [
+      {
+        "id": 7000129,
+        "author": {
+          "login": "priya-s",
+          "name": "Priya Shah",
+          "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+        },
+        "body": "Overall this looks good. Could you split the tax rates into their own PR next time? It was a lot to review at once.",
+        "bodyHTML": "<p>Overall this looks good. Could you split the tax rates into their own PR next time? It was a lot to review at once.</p>",
+        "createdAt": "2026-09-21T19:00:00.000Z",
+        "url": "https://github.com/acme/storefront/pull/482#issuecomment-7000129"
+      },
+      {
+        "id": 7000130,
+        "author": {
+          "login": "sam-oyelaran",
+          "name": "Sam Oyelaran",
+          "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+        },
+        "body": "Did you test this on Safari? The shipping radios looked off for me.",
+        "bodyHTML": "<p>Did you test this on Safari? The shipping radios looked off for me.</p>",
+        "createdAt": "2026-09-21T19:10:00.000Z",
+        "url": "https://github.com/acme/storefront/pull/482#issuecomment-7000130"
+      }
+    ],
+    "reviews": [
+      {
+        "id": 7000131,
+        "author": {
+          "login": "jordan-k",
+          "name": "Jordan Kim",
+          "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+        },
+        "state": "CHANGES_REQUESTED",
+        "body": "A few things on money handling, mostly the rounding and cents vs dollars. Happy to pair on it.",
+        "bodyHTML": "<p>A few things on money handling, mostly the rounding and cents vs dollars. Happy to pair on it.</p>",
+        "submittedAt": "2026-09-21T15:30:00.000Z",
+        "url": "https://github.com/acme/storefront/pull/482#pullrequestreview-7000131"
+      }
+    ],
+    "participants": [
+      {
+        "login": "maya-dev",
+        "name": "Maya Chen",
+        "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(68%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E"
+      },
+      {
+        "login": "jordan-k",
+        "name": "Jordan Kim",
+        "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+      },
+      {
+        "login": "priya-s",
+        "name": "Priya Shah",
+        "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+      },
+      {
+        "login": "sam-oyelaran",
+        "name": "Sam Oyelaran",
+        "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+      }
+    ]
+  },
+  "files": [
+    {
+      "path": "src/checkout/cart-summary.tsx",
+      "status": "modified",
+      "additions": 120,
+      "deletions": 2,
+      "patch": "@@ -1,2 +1,120 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(0, 2);\n+  if (!cart0.items.length) return null;\n+  const value4 = computeLine(0, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(0, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(0, 11);\n+  if (!cart0.items.length) return null;\n+  const value13 = computeLine(0, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(0, 16);\n+  const value17 = computeLine(0, 17);\n+\n+  const value19 = computeLine(0, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(0, 22);\n+  const value23 = computeLine(0, 23);\n+  if (!cart0.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(0, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(0, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(0, 31);\n+  const value32 = computeLine(0, 32);\n+  if (!cart0.items.length) return null;\n+  const value34 = computeLine(0, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(0, 37);\n+  const value38 = computeLine(0, 38);\n+  if (!cart0.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(0, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(0, 43);\n+  const value44 = computeLine(0, 44);\n+\n+  const value46 = computeLine(0, 46);\n+  const value47 = computeLine(0, 47);\n+  if (!cart0.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  const value52 = computeLine(0, 52);\n+  const value53 = computeLine(0, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart0.items.length) return null;\n+  const value58 = computeLine(0, 58);\n+  const value59 = computeLine(0, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(0, 61);\n+  const value62 = computeLine(0, 62);\n+\n+  const value64 = computeLine(0, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  const value67 = computeLine(0, 67);\n+  const value68 = computeLine(0, 68);\n+  if (!cart0.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(0, 71);\n+\n+  const value73 = computeLine(0, 73);\n+  const value74 = computeLine(0, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(0, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart0.items.length) return null;\n+  const value79 = computeLine(0, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(0, 82);\n+  const value83 = computeLine(0, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(0, 86);\n+  if (!cart0.items.length) return null;\n+  const value88 = computeLine(0, 88);\n+  const value89 = computeLine(0, 89);\n+\n+  // step 91: keep totals in cents until the very end\n+  const value92 = computeLine(0, 92);\n+  if (!cart0.items.length) return null;\n+  const value94 = computeLine(0, 94);\n+  const subtotal95 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  const value97 = computeLine(0, 97);\n+  // step 98: keep totals in cents until the very end\n+\n+  const subtotal100 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value101 = computeLine(0, 101);\n+  if (!cart0.items.length) return null;\n+  const value103 = computeLine(0, 103);\n+  const value104 = computeLine(0, 104);\n+  // step 105: keep totals in cents until the very end\n+  const value106 = computeLine(0, 106);\n+  const value107 = computeLine(0, 107);\n+\n+  const value109 = computeLine(0, 109);\n+  const subtotal110 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart0.items.length) return null;\n+  // step 112: keep totals in cents until the very end\n+  const value113 = computeLine(0, 113);\n+  if (!cart0.items.length) return null;\n+  const subtotal115 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value116 = computeLine(0, 116);\n+\n+  const value118 = computeLine(0, 118);\n+  // step 119: keep totals in cents until the very end\n+  const subtotal120 = items.reduce((sum, item) => sum + item.price * item.qty, 0);"
+    },
+    {
+      "path": "src/checkout/use-cart.ts",
+      "status": "modified",
+      "additions": 90,
+      "deletions": 2,
+      "patch": "@@ -1,2 +1,90 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(1, 2);\n+  if (!cart1.items.length) return null;\n+  const value4 = computeLine(1, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart1.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(1, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(1, 11);\n+  if (!cart1.items.length) return null;\n+  const value13 = computeLine(1, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(1, 16);\n+  const value17 = computeLine(1, 17);\n+\n+  const value19 = computeLine(1, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(1, 22);\n+  const value23 = computeLine(1, 23);\n+  if (!cart1.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(1, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(1, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(1, 31);\n+  const value32 = computeLine(1, 32);\n+  if (!cart1.items.length) return null;\n+  const value34 = computeLine(1, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(1, 37);\n+  const value38 = computeLine(1, 38);\n+  if (!cart1.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(1, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(1, 43);\n+  const value44 = computeLine(1, 44);\n+\n+  const value46 = computeLine(1, 46);\n+  const value47 = computeLine(1, 47);\n+  if (!cart1.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart1.items.length) return null;\n+  const value52 = computeLine(1, 52);\n+  const value53 = computeLine(1, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart1.items.length) return null;\n+  const value58 = computeLine(1, 58);\n+  const value59 = computeLine(1, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(1, 61);\n+  const value62 = computeLine(1, 62);\n+\n+  const value64 = computeLine(1, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart1.items.length) return null;\n+  const value67 = computeLine(1, 67);\n+  const value68 = computeLine(1, 68);\n+  if (!cart1.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(1, 71);\n+\n+  const value73 = computeLine(1, 73);\n+  const value74 = computeLine(1, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(1, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart1.items.length) return null;\n+  const value79 = computeLine(1, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(1, 82);\n+  const value83 = computeLine(1, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(1, 86);\n+  if (!cart1.items.length) return null;\n+  const value88 = computeLine(1, 88);\n+  const value89 = computeLine(1, 89);\n+"
+    },
+    {
+      "path": "src/checkout/shipping-options.tsx",
+      "status": "added",
+      "additions": 140,
+      "deletions": 0,
+      "patch": "@@ -1,0 +1,140 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(2, 2);\n+  if (!cart2.items.length) return null;\n+  const value4 = computeLine(2, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(2, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(2, 11);\n+  if (!cart2.items.length) return null;\n+  const value13 = computeLine(2, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(2, 16);\n+  const value17 = computeLine(2, 17);\n+\n+  const value19 = computeLine(2, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(2, 22);\n+  const value23 = computeLine(2, 23);\n+  if (!cart2.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(2, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(2, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(2, 31);\n+  const value32 = computeLine(2, 32);\n+  if (!cart2.items.length) return null;\n+  const value34 = computeLine(2, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(2, 37);\n+  const value38 = computeLine(2, 38);\n+  if (!cart2.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(2, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(2, 43);\n+  const value44 = computeLine(2, 44);\n+\n+  const value46 = computeLine(2, 46);\n+  const value47 = computeLine(2, 47);\n+  if (!cart2.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value52 = computeLine(2, 52);\n+  const value53 = computeLine(2, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart2.items.length) return null;\n+  const value58 = computeLine(2, 58);\n+  const value59 = computeLine(2, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(2, 61);\n+  const value62 = computeLine(2, 62);\n+\n+  const value64 = computeLine(2, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value67 = computeLine(2, 67);\n+  const value68 = computeLine(2, 68);\n+  if (!cart2.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(2, 71);\n+\n+  const value73 = computeLine(2, 73);\n+  const value74 = computeLine(2, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(2, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart2.items.length) return null;\n+  const value79 = computeLine(2, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(2, 82);\n+  const value83 = computeLine(2, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(2, 86);\n+  if (!cart2.items.length) return null;\n+  const value88 = computeLine(2, 88);\n+  const value89 = computeLine(2, 89);\n+\n+  // step 91: keep totals in cents until the very end\n+  const value92 = computeLine(2, 92);\n+  if (!cart2.items.length) return null;\n+  const value94 = computeLine(2, 94);\n+  const subtotal95 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  const value97 = computeLine(2, 97);\n+  // step 98: keep totals in cents until the very end\n+\n+  const subtotal100 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value101 = computeLine(2, 101);\n+  if (!cart2.items.length) return null;\n+  const value103 = computeLine(2, 103);\n+  const value104 = computeLine(2, 104);\n+  // step 105: keep totals in cents until the very end\n+  const value106 = computeLine(2, 106);\n+  const value107 = computeLine(2, 107);\n+\n+  const value109 = computeLine(2, 109);\n+  const subtotal110 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart2.items.length) return null;\n+  // step 112: keep totals in cents until the very end\n+  const value113 = computeLine(2, 113);\n+  if (!cart2.items.length) return null;\n+  const subtotal115 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value116 = computeLine(2, 116);\n+\n+  const value118 = computeLine(2, 118);\n+  // step 119: keep totals in cents until the very end\n+  const subtotal120 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value121 = computeLine(2, 121);\n+  const value122 = computeLine(2, 122);\n+  if (!cart2.items.length) return null;\n+  const value124 = computeLine(2, 124);\n+  const subtotal125 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value127 = computeLine(2, 127);\n+  const value128 = computeLine(2, 128);\n+  if (!cart2.items.length) return null;\n+  const subtotal130 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value131 = computeLine(2, 131);\n+  if (!cart2.items.length) return null;\n+  // step 133: keep totals in cents until the very end\n+  const value134 = computeLine(2, 134);\n+\n+  const value136 = computeLine(2, 136);\n+  const value137 = computeLine(2, 137);\n+  if (!cart2.items.length) return null;\n+  const value139 = computeLine(2, 139);\n+  // step 140: keep totals in cents until the very end"
+    },
+    {
+      "path": "src/lib/money.ts",
+      "status": "modified",
+      "additions": 60,
+      "deletions": 2,
+      "patch": "@@ -1,2 +1,60 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(3, 2);\n+  if (!cart3.items.length) return null;\n+  const value4 = computeLine(3, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart3.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(3, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(3, 11);\n+  if (!cart3.items.length) return null;\n+  const value13 = computeLine(3, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(3, 16);\n+  const value17 = computeLine(3, 17);\n+\n+  const value19 = computeLine(3, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(3, 22);\n+  const value23 = computeLine(3, 23);\n+  if (!cart3.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(3, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(3, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(3, 31);\n+  const value32 = computeLine(3, 32);\n+  if (!cart3.items.length) return null;\n+  const value34 = computeLine(3, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(3, 37);\n+  const value38 = computeLine(3, 38);\n+  if (!cart3.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(3, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(3, 43);\n+  const value44 = computeLine(3, 44);\n+\n+  const value46 = computeLine(3, 46);\n+  const value47 = computeLine(3, 47);\n+  if (!cart3.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart3.items.length) return null;\n+  const value52 = computeLine(3, 52);\n+  const value53 = computeLine(3, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart3.items.length) return null;\n+  const value58 = computeLine(3, 58);\n+  const value59 = computeLine(3, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);"
+    },
+    {
+      "path": "src/lib/tax/rates.ts",
+      "status": "added",
+      "additions": 80,
+      "deletions": 0,
+      "patch": "@@ -1,0 +1,80 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(4, 2);\n+  if (!cart4.items.length) return null;\n+  const value4 = computeLine(4, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart4.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(4, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(4, 11);\n+  if (!cart4.items.length) return null;\n+  const value13 = computeLine(4, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(4, 16);\n+  const value17 = computeLine(4, 17);\n+\n+  const value19 = computeLine(4, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(4, 22);\n+  const value23 = computeLine(4, 23);\n+  if (!cart4.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(4, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(4, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(4, 31);\n+  const value32 = computeLine(4, 32);\n+  if (!cart4.items.length) return null;\n+  const value34 = computeLine(4, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(4, 37);\n+  const value38 = computeLine(4, 38);\n+  if (!cart4.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(4, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(4, 43);\n+  const value44 = computeLine(4, 44);\n+\n+  const value46 = computeLine(4, 46);\n+  const value47 = computeLine(4, 47);\n+  if (!cart4.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart4.items.length) return null;\n+  const value52 = computeLine(4, 52);\n+  const value53 = computeLine(4, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart4.items.length) return null;\n+  const value58 = computeLine(4, 58);\n+  const value59 = computeLine(4, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(4, 61);\n+  const value62 = computeLine(4, 62);\n+\n+  const value64 = computeLine(4, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart4.items.length) return null;\n+  const value67 = computeLine(4, 67);\n+  const value68 = computeLine(4, 68);\n+  if (!cart4.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(4, 71);\n+\n+  const value73 = computeLine(4, 73);\n+  const value74 = computeLine(4, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(4, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart4.items.length) return null;\n+  const value79 = computeLine(4, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);"
+    },
+    {
+      "path": "src/api/orders/create.ts",
+      "status": "modified",
+      "additions": 110,
+      "deletions": 2,
+      "patch": "@@ -1,2 +1,110 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(5, 2);\n+  if (!cart5.items.length) return null;\n+  const value4 = computeLine(5, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart5.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(5, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(5, 11);\n+  if (!cart5.items.length) return null;\n+  const value13 = computeLine(5, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(5, 16);\n+  const value17 = computeLine(5, 17);\n+\n+  const value19 = computeLine(5, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(5, 22);\n+  const value23 = computeLine(5, 23);\n+  if (!cart5.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(5, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(5, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(5, 31);\n+  const value32 = computeLine(5, 32);\n+  if (!cart5.items.length) return null;\n+  const value34 = computeLine(5, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(5, 37);\n+  const value38 = computeLine(5, 38);\n+  if (!cart5.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(5, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(5, 43);\n+  const value44 = computeLine(5, 44);\n+\n+  const value46 = computeLine(5, 46);\n+  const value47 = computeLine(5, 47);\n+  if (!cart5.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart5.items.length) return null;\n+  const value52 = computeLine(5, 52);\n+  const value53 = computeLine(5, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart5.items.length) return null;\n+  const value58 = computeLine(5, 58);\n+  const value59 = computeLine(5, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(5, 61);\n+  const value62 = computeLine(5, 62);\n+\n+  const value64 = computeLine(5, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart5.items.length) return null;\n+  const value67 = computeLine(5, 67);\n+  const value68 = computeLine(5, 68);\n+  if (!cart5.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(5, 71);\n+\n+  const value73 = computeLine(5, 73);\n+  const value74 = computeLine(5, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(5, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart5.items.length) return null;\n+  const value79 = computeLine(5, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(5, 82);\n+  const value83 = computeLine(5, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(5, 86);\n+  if (!cart5.items.length) return null;\n+  const value88 = computeLine(5, 88);\n+  const value89 = computeLine(5, 89);\n+\n+  // step 91: keep totals in cents until the very end\n+  const value92 = computeLine(5, 92);\n+  if (!cart5.items.length) return null;\n+  const value94 = computeLine(5, 94);\n+  const subtotal95 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart5.items.length) return null;\n+  const value97 = computeLine(5, 97);\n+  // step 98: keep totals in cents until the very end\n+\n+  const subtotal100 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value101 = computeLine(5, 101);\n+  if (!cart5.items.length) return null;\n+  const value103 = computeLine(5, 103);\n+  const value104 = computeLine(5, 104);\n+  // step 105: keep totals in cents until the very end\n+  const value106 = computeLine(5, 106);\n+  const value107 = computeLine(5, 107);\n+\n+  const value109 = computeLine(5, 109);\n+  const subtotal110 = items.reduce((sum, item) => sum + item.price * item.qty, 0);"
+    },
+    {
+      "path": "src/api/orders/validate.ts",
+      "status": "added",
+      "additions": 70,
+      "deletions": 0,
+      "patch": "@@ -1,0 +1,70 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(6, 2);\n+  if (!cart6.items.length) return null;\n+  const value4 = computeLine(6, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart6.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(6, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(6, 11);\n+  if (!cart6.items.length) return null;\n+  const value13 = computeLine(6, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(6, 16);\n+  const value17 = computeLine(6, 17);\n+\n+  const value19 = computeLine(6, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(6, 22);\n+  const value23 = computeLine(6, 23);\n+  if (!cart6.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(6, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(6, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(6, 31);\n+  const value32 = computeLine(6, 32);\n+  if (!cart6.items.length) return null;\n+  const value34 = computeLine(6, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(6, 37);\n+  const value38 = computeLine(6, 38);\n+  if (!cart6.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(6, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(6, 43);\n+  const value44 = computeLine(6, 44);\n+\n+  const value46 = computeLine(6, 46);\n+  const value47 = computeLine(6, 47);\n+  if (!cart6.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart6.items.length) return null;\n+  const value52 = computeLine(6, 52);\n+  const value53 = computeLine(6, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart6.items.length) return null;\n+  const value58 = computeLine(6, 58);\n+  const value59 = computeLine(6, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(6, 61);\n+  const value62 = computeLine(6, 62);\n+\n+  const value64 = computeLine(6, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart6.items.length) return null;\n+  const value67 = computeLine(6, 67);\n+  const value68 = computeLine(6, 68);\n+  if (!cart6.items.length) return null;\n+  // step 70: keep totals in cents until the very end"
+    },
+    {
+      "path": "src/components/price-tag.tsx",
+      "status": "modified",
+      "additions": 45,
+      "deletions": 2,
+      "patch": "@@ -1,2 +1,45 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(7, 2);\n+  if (!cart7.items.length) return null;\n+  const value4 = computeLine(7, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart7.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(7, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(7, 11);\n+  if (!cart7.items.length) return null;\n+  const value13 = computeLine(7, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(7, 16);\n+  const value17 = computeLine(7, 17);\n+\n+  const value19 = computeLine(7, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(7, 22);\n+  const value23 = computeLine(7, 23);\n+  if (!cart7.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(7, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(7, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(7, 31);\n+  const value32 = computeLine(7, 32);\n+  if (!cart7.items.length) return null;\n+  const value34 = computeLine(7, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(7, 37);\n+  const value38 = computeLine(7, 38);\n+  if (!cart7.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(7, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(7, 43);\n+  const value44 = computeLine(7, 44);\n+"
+    },
+    {
+      "path": "tests/checkout/cart-summary.test.tsx",
+      "status": "added",
+      "additions": 100,
+      "deletions": 0,
+      "patch": "@@ -1,0 +1,100 @@\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(8, 2);\n+  if (!cart8.items.length) return null;\n+  const value4 = computeLine(8, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart8.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(8, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(8, 11);\n+  if (!cart8.items.length) return null;\n+  const value13 = computeLine(8, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(8, 16);\n+  const value17 = computeLine(8, 17);\n+\n+  const value19 = computeLine(8, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(8, 22);\n+  const value23 = computeLine(8, 23);\n+  if (!cart8.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(8, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(8, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(8, 31);\n+  const value32 = computeLine(8, 32);\n+  if (!cart8.items.length) return null;\n+  const value34 = computeLine(8, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(8, 37);\n+  const value38 = computeLine(8, 38);\n+  if (!cart8.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value41 = computeLine(8, 41);\n+  // step 42: keep totals in cents until the very end\n+  const value43 = computeLine(8, 43);\n+  const value44 = computeLine(8, 44);\n+\n+  const value46 = computeLine(8, 46);\n+  const value47 = computeLine(8, 47);\n+  if (!cart8.items.length) return null;\n+  // step 49: keep totals in cents until the very end\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart8.items.length) return null;\n+  const value52 = computeLine(8, 52);\n+  const value53 = computeLine(8, 53);\n+\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 56: keep totals in cents until the very end\n+  if (!cart8.items.length) return null;\n+  const value58 = computeLine(8, 58);\n+  const value59 = computeLine(8, 59);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value61 = computeLine(8, 61);\n+  const value62 = computeLine(8, 62);\n+\n+  const value64 = computeLine(8, 64);\n+  const subtotal65 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart8.items.length) return null;\n+  const value67 = computeLine(8, 67);\n+  const value68 = computeLine(8, 68);\n+  if (!cart8.items.length) return null;\n+  // step 70: keep totals in cents until the very end\n+  const value71 = computeLine(8, 71);\n+\n+  const value73 = computeLine(8, 73);\n+  const value74 = computeLine(8, 74);\n+  const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value76 = computeLine(8, 76);\n+  // step 77: keep totals in cents until the very end\n+  if (!cart8.items.length) return null;\n+  const value79 = computeLine(8, 79);\n+  const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+\n+  const value82 = computeLine(8, 82);\n+  const value83 = computeLine(8, 83);\n+  // step 84: keep totals in cents until the very end\n+  const subtotal85 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value86 = computeLine(8, 86);\n+  if (!cart8.items.length) return null;\n+  const value88 = computeLine(8, 88);\n+  const value89 = computeLine(8, 89);\n+\n+  // step 91: keep totals in cents until the very end\n+  const value92 = computeLine(8, 92);\n+  if (!cart8.items.length) return null;\n+  const value94 = computeLine(8, 94);\n+  const subtotal95 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart8.items.length) return null;\n+  const value97 = computeLine(8, 97);\n+  // step 98: keep totals in cents until the very end\n+\n+  const subtotal100 = items.reduce((sum, item) => sum + item.price * item.qty, 0);"
+    },
+    {
+      "path": "docs/checkout.md",
+      "status": "modified",
+      "additions": 40,
+      "deletions": 2,
+      "patch": "@@ -1,2 +1,40 @@\n-  const legacyTotal = sumAll(items);\n-  return legacyTotal;\n+import { formatPrice } from '../lib/money';\n+  const value2 = computeLine(9, 2);\n+  if (!cart9.items.length) return null;\n+  const value4 = computeLine(9, 4);\n+  const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  if (!cart9.items.length) return null;\n+  // step 7: keep totals in cents until the very end\n+  const value8 = computeLine(9, 8);\n+\n+  const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value11 = computeLine(9, 11);\n+  if (!cart9.items.length) return null;\n+  const value13 = computeLine(9, 13);\n+  // step 14: keep totals in cents until the very end\n+  const subtotal15 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value16 = computeLine(9, 16);\n+  const value17 = computeLine(9, 17);\n+\n+  const value19 = computeLine(9, 19);\n+  const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  // step 21: keep totals in cents until the very end\n+  const value22 = computeLine(9, 22);\n+  const value23 = computeLine(9, 23);\n+  if (!cart9.items.length) return null;\n+  const subtotal25 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value26 = computeLine(9, 26);\n+\n+  // step 28: keep totals in cents until the very end\n+  const value29 = computeLine(9, 29);\n+  const subtotal30 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const value31 = computeLine(9, 31);\n+  const value32 = computeLine(9, 32);\n+  if (!cart9.items.length) return null;\n+  const value34 = computeLine(9, 34);\n+  // step 35: keep totals in cents until the very end\n+\n+  const value37 = computeLine(9, 37);\n+  const value38 = computeLine(9, 38);\n+  if (!cart9.items.length) return null;\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);"
+    }
+  ],
+  "users": [
+    {
+      "login": "jordan-k",
+      "name": "Jordan Kim",
+      "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(70%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+    },
+    {
+      "login": "priya-s",
+      "name": "Priya Shah",
+      "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(349%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EP%3C%2Ftext%3E%3C%2Fsvg%3E"
+    },
+    {
+      "login": "sam-oyelaran",
+      "name": "Sam Oyelaran",
+      "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(145%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ES%3C%2Ftext%3E%3C%2Fsvg%3E"
+    },
+    {
+      "login": "alex-rivera",
+      "name": "Alex Rivera",
+      "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(40%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EA%3C%2Ftext%3E%3C%2Fsvg%3E"
+    },
+    {
+      "login": "jamie-l",
+      "name": "Jamie Lee",
+      "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(311%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EJ%3C%2Ftext%3E%3C%2Fsvg%3E"
+    },
+    {
+      "login": "taylor-b",
+      "name": "Taylor Brooks",
+      "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(90%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3ET%3C%2Ftext%3E%3C%2Fsvg%3E"
+    },
+    {
+      "login": "maya-dev",
+      "name": "Maya Chen",
+      "avatarUrl": "data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2040%2040%22%3E%3Crect%20width%3D%2240%22%20height%3D%2240%22%20fill%3D%22hsl(68%2055%25%2055%25)%22%2F%3E%3Ctext%20x%3D%2220%22%20y%3D%2226%22%20font-size%3D%2218%22%20text-anchor%3D%22middle%22%20fill%3D%22white%22%20font-family%3D%22sans-serif%22%3EM%3C%2Ftext%3E%3C%2Fsvg%3E"
+    }
+  ],
+  "failOnce": [
+    7000103
+  ]
+}
