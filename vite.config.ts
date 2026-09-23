@@ -7,7 +7,7 @@ export default defineConfig({
   base: './',
   plugins: [react(), tailwindcss()],
   build: {
-    outDir: '../../skills/code-review-feedback/app/web',
+    outDir: '../../skills/address-pr-review/app/web',
     emptyOutDir: true,
   },
 });

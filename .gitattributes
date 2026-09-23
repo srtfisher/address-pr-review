@@ -1,2 +1,2 @@
-skills/code-review-feedback/app/** linguist-generated=true -diff
+skills/address-pr-review/app/** linguist-generated=true -diff
 test/fixtures/large-pr/*.json linguist-generated=true

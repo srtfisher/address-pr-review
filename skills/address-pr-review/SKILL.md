@@ -1,9 +1,9 @@
 ---
-name: code-review-feedback
-description: Work through a pull request's code review feedback. Reads every unresolved review thread and PR comment, makes the fixes you judge right as local commits, and drafts a reply to each. Then opens a local GitHub-style app where the human checks each fix against the comment, edits or approves replies, or sends items back for rework. Once approved, pushes the fixes and posts exactly the approved replies. Use when asked to handle, address, respond to, or work through review feedback or PR comments.
+name: address-pr-review
+description: Use whenever a pull request has received code review feedback that needs addressing, even if the human doesn't name this skill. Triggers on "address the review", "fix the PR comments", "respond to the reviewer", "work through the feedback on #123", "the reviewer left comments", a pasted PR or review comment URL, or noticing unresolved review threads on the current branch's PR. Reads every unresolved review thread and PR comment, applies the fixes you judge right as local commits, and drafts a reply to each. Then opens a local GitHub-style app where the human checks each fix against its comment, edits or approves replies, or sends items back for rework. Once approved, pushes the fixes and posts exactly the approved replies.
 ---
 
-# Code review feedback
+# Address PR review
 
 Work through a pull request's review feedback in rounds with the human. You decide what to fix and make the fixes locally. The human reviews your fixes and drafts in a local app, where they approve replies or send items back to you with a note. When they approve, you push the fixes, then post exactly the replies they approved.
 

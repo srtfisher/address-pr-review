@@ -122,7 +122,7 @@ async function commandOpen(
   const { owner, repo, number } = drafts.pr;
   const session = values.session
     ? resolve(values.session)
-    : join(tmpdir(), 'code-review-feedback', `${owner}-${repo}-${number}-${randomBytes(4).toString('hex')}`);
+    : join(tmpdir(), 'address-pr-review', `${owner}-${repo}-${number}-${randomBytes(4).toString('hex')}`);
   const files = sessionFiles(session);
   if (values.session) {
     if (!existsSync(files.drafts)) fail(`${session} is not a review session.`);

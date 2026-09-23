@@ -1,12 +1,12 @@
 {
-  "name": "code-review-feedback",
+  "name": "@srtfisher/address-pr-review",
   "version": "0.1.1",
-  "description": "An agent skill and local web app for answering pull request review feedback, with a human approving every reply.",
+  "description": "An agent skill and local web app for addressing pull request review feedback: it applies the fixes and drafts the replies, with a human approving every one.",
   "license": "MIT",
   "author": "Sean Fisher <sean@alley.com>",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/srtfisher/code-review-feedback.git"
+    "url": "git+https://github.com/srtfisher/address-pr-review.git"
   },
   "keywords": [
     "code-review",
@@ -17,10 +17,10 @@
   ],
   "type": "module",
   "bin": {
-    "code-review-feedback": "skills/code-review-feedback/app/cli.mjs"
+    "address-pr-review": "skills/address-pr-review/app/cli.mjs"
   },
   "files": [
-    "skills/code-review-feedback"
+    "skills/address-pr-review"
   ],
   "engines": {
     "node": ">=20"
@@ -28,8 +28,8 @@
   "scripts": {
     "build": "npm run build:web && npm run build:server",
     "build:web": "vite build",
-    "build:server": "esbuild src/server/cli.ts --bundle --platform=node --format=esm --target=node20 --outfile=skills/code-review-feedback/app/cli.mjs --banner:js='#!/usr/bin/env node' --minify --legal-comments=none",
-    "dev": "npm run build && node skills/code-review-feedback/app/cli.mjs open test/fixtures/large-pr/drafts.json --fixture test/fixtures/large-pr",
+    "build:server": "esbuild src/server/cli.ts --bundle --platform=node --format=esm --target=node20 --outfile=skills/address-pr-review/app/cli.mjs --banner:js='#!/usr/bin/env node' --minify --legal-comments=none",
+    "dev": "npm run build && node skills/address-pr-review/app/cli.mjs open test/fixtures/large-pr/drafts.json --fixture test/fixtures/large-pr",
     "typecheck": "tsc --noEmit",
     "test": "vitest run"
   },

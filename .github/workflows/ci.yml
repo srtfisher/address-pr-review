@@ -23,8 +23,8 @@ jobs:
       - run: npm run build
       - name: Committed build matches the source
         run: |
-          if [ -n "$(git status --porcelain -- skills/code-review-feedback/app)" ]; then
-            git status --short -- skills/code-review-feedback/app
-            echo "::error::skills/code-review-feedback/app is out of date. Run npm run build and commit the result."
+          if [ -n "$(git status --porcelain -- skills/address-pr-review/app)" ]; then
+            git status --short -- skills/address-pr-review/app
+            echo "::error::skills/address-pr-review/app is out of date. Run npm run build and commit the result."
             exit 1
           fi

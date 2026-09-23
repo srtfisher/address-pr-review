@@ -8,7 +8,7 @@ import { Sidebar } from './components/Sidebar';
 import { SubmitDialog } from './components/SubmitDialog';
 import { groupItems, statusOf, type ItemStatus } from './model';
 
-const THEME_KEY = 'code-review-feedback:theme';
+const THEME_KEY = 'address-pr-review:theme';
 const SAVE_DELAY_MS = 400;
 
 function readTheme(): Theme {
