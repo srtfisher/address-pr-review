@@ -1,6 +1,6 @@
 {
   "name": "code-review-feedback",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An agent skill and local web app for answering pull request review feedback, with a human approving every reply.",
   "license": "MIT",
   "author": "Sean Fisher <sean@alley.com>",
