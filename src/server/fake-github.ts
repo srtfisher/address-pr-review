@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import type { FilePatch, PrRef, PullRequest, User } from '../shared/schema';
 import type { GitHub } from './github';
+import type { LocalGit } from './local-git';
 
 export interface FakePost {
   kind: 'thread' | 'comment';
@@ -15,6 +16,17 @@ export interface FixtureData {
   users: User[];
   /** Thread comment ids whose first reply attempt fails, to exercise retry. */
   failOnce?: number[];
+  commits?: Record<string, FilePatch[]>;
+}
+
+export class FakeGit implements LocalGit {
+  constructor(private readonly data: FixtureData) {}
+
+  async commitFiles(sha: string): Promise<FilePatch[]> {
+    const files = this.data.commits?.[sha];
+    if (!files) throw new Error(`unknown revision ${sha}`);
+    return files;
+  }
 }
 
 const escapeHtml = (text: string): string =>

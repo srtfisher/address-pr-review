@@ -116,6 +116,20 @@ const draftsFor: Record<string, string> = {
 
 const threads: Thread[] = [];
 const draftItems: Drafts['items'] = [];
+const commits: Record<string, FilePatch[]> = {};
+
+const fixCommit = (sha: string, file: FilePatch, line: number): void => {
+  const start = Math.max(1, line - 2);
+  const old = sourceFile(specs.indexOf(specs.find((spec) => spec.path === file.path)!), line + 3).slice(start - 1, line + 2);
+  const patch = [
+    `@@ -${start},${old.length} +${start},${old.length} @@`,
+    ...old.slice(0, 2).map((text) => ` ${text}`),
+    `-${old[2]}`,
+    `+${old[2]!.replace(/computeLine|items\.length|value/, (match) => ({ computeLine: 'computeLineInCents', 'items.length': 'items.length > 0', value: 'cents' })[match] ?? match)}`,
+    ...old.slice(3).map((text) => ` ${text}`),
+  ].join('\n');
+  commits[sha] = [{ path: file.path, status: 'modified', additions: 1, deletions: 1, patch }];
+};
 
 threadSeeds.forEach(([fileIndex, line, text, reviewerIndex, decision], index) => {
   const file = files[fileIndex]!;
@@ -138,6 +152,7 @@ threadSeeds.forEach(([fileIndex, line, text, reviewerIndex, decision], index) =>
     diffHunk: hunkUpTo(file, line),
     comments: conversation,
   });
+  if (decision === 'implemented') fixCommit((0xa1b2c3d + index).toString(16), file, line);
   draftItems.push({
     id: `thread-${first.id}`,
     kind: 'thread',
@@ -241,7 +256,9 @@ const drafts: Drafts = {
   summary: { draft: 'Thanks all. Most of this is fixed; I pushed back on the rounding and the schema location, details in the threads.' },
 };
 
+fixCommit('b7e91f0', files[2]!, 50);
+
 mkdirSync(out, { recursive: true });
-writeFileSync(join(out, 'fixture.json'), `${JSON.stringify({ pr, files, users: [...reviewers, ...others, me], failOnce: [threads[2]!.comments[0]!.id] }, null, 2)}\n`);
+writeFileSync(join(out, 'fixture.json'), `${JSON.stringify({ pr, files, users: [...reviewers, ...others, me], failOnce: [threads[2]!.comments[0]!.id], commits }, null, 2)}\n`);
 writeFileSync(join(out, 'drafts.json'), `${JSON.stringify(drafts, null, 2)}\n`);
 console.log(`wrote ${threads.length} threads, ${files.length} files to ${out}`);

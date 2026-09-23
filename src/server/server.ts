@@ -6,6 +6,7 @@ import { extname, join, normalize, sep } from 'node:path';
 import { rankMentions } from '../shared/mentions';
 import {
   Action,
+  RESULT_STATUSES,
   type Drafts,
   type FilePatch,
   type PullRequest,
@@ -15,12 +16,14 @@ import {
   type SessionState,
 } from '../shared/schema';
 import type { GitHub } from './github';
+import type { LocalGit } from './local-git';
 import { buildItems, buildResults, initialState, readSavedState, sessionFiles, writeJson } from './session';
 
 export interface ServerOptions {
   sessionDir: string;
   drafts: Drafts;
   github: GitHub;
+  git: LocalGit;
   webDir: string | null;
   fixture: boolean;
   port?: number;
@@ -72,7 +75,7 @@ function send(response: ServerResponse, status: number, body: unknown): void {
 const errorMessage = (error: unknown): string => (error instanceof Error ? error.message : String(error));
 
 export async function startServer(options: ServerOptions): Promise<RunningServer> {
-  const { drafts, github, sessionDir } = options;
+  const { drafts, github, git, sessionDir } = options;
   const token = randomBytes(24).toString('hex');
   const files = sessionFiles(sessionDir);
 
@@ -82,7 +85,7 @@ export async function startServer(options: ServerOptions): Promise<RunningServer
   writeJson(files.state, state);
 
   let filePatches: Promise<FilePatch[]> | null = null;
-  let posting = false;
+  const commitPatches = new Map<string, Promise<FilePatch[]>>();
 
   const itemById = (id: string): SessionItem => {
     const item = items.find((candidate) => candidate.id === id);
@@ -91,26 +94,6 @@ export async function startServer(options: ServerOptions): Promise<RunningServer
   };
 
   const save = (): void => writeJson(files.state, state);
-
-  const postItem = async (item: SessionItem): Promise<void> => {
-    const itemState = state.items[item.id]!;
-    if (itemState.action !== 'send' || itemState.postedUrl) return;
-    if (itemState.body.trim() === '') {
-      itemState.error = 'The reply is empty. Write something or skip it.';
-      save();
-      return;
-    }
-    try {
-      itemState.postedUrl =
-        item.kind === 'thread'
-          ? await github.replyToThread(drafts.pr, item.commentId!, itemState.body)
-          : await github.createComment(drafts.pr, itemState.body);
-      itemState.error = null;
-    } catch (error) {
-      itemState.error = errorMessage(error);
-    }
-    save();
-  };
 
   const authorized = (request: IncomingMessage): boolean => {
     const given = Buffer.from(String(request.headers['x-crf-token'] ?? ''));
@@ -144,13 +127,14 @@ export async function startServer(options: ServerOptions): Promise<RunningServer
       const item = itemById(decodeURIComponent(itemMatch[1]!));
       const itemState = state.items[item.id]!;
       if (itemState.postedUrl) throw new HttpError(409, 'this reply has already been posted');
-      const body = (await readBody(request)) as { action?: unknown; body?: unknown };
+      const body = (await readBody(request)) as { action?: unknown; body?: unknown; instructions?: unknown };
       if (body.action !== undefined) {
         const action = body.action === null ? { success: true as const, data: null } : Action.safeParse(body.action);
-        if (!action.success) throw new HttpError(400, 'action must be "send", "skip", or null');
+        if (!action.success) throw new HttpError(400, 'action must be "send", "skip", "ask", or null');
         itemState.action = action.data;
       }
       if (typeof body.body === 'string') itemState.body = body.body;
+      if (typeof body.instructions === 'string') itemState.instructions = body.instructions;
       itemState.error = null;
       save();
       return send(response, 200, itemState);
@@ -179,25 +163,34 @@ export async function startServer(options: ServerOptions): Promise<RunningServer
       return send(response, 200, file);
     }
 
-    if (route === 'POST /api/post') {
-      if (posting) throw new HttpError(409, 'already posting');
-      const { ids } = (await readBody(request)) as { ids?: unknown };
-      const wanted = Array.isArray(ids) ? ids.map(String) : items.map((item) => item.id);
-      posting = true;
-      try {
-        for (const id of wanted) await postItem(itemById(id));
-      } finally {
-        posting = false;
+    if (route === 'GET /api/commit') {
+      const sha = url.searchParams.get('sha') ?? '';
+      if (!items.some((item) => item.commits.includes(sha))) throw new HttpError(404, `no item lists commit "${sha}"`);
+      if (!commitPatches.has(sha)) {
+        commitPatches.set(
+          sha,
+          git.commitFiles(sha).catch((error: unknown) => {
+            commitPatches.delete(sha);
+            throw error;
+          }),
+        );
       }
-      return send(response, 200, state);
+      return send(response, 200, await commitPatches.get(sha));
     }
 
     if (route === 'POST /api/finish') {
       const { status } = (await readBody(request)) as { status?: unknown };
-      if (status !== 'done' && status !== 'canceled') throw new HttpError(400, 'status must be "done" or "canceled"');
-      writeJson(files.results, buildResults(status, drafts, items, state));
+      if (!RESULT_STATUSES.includes(status as ResultStatus)) {
+        throw new HttpError(400, `status must be one of ${RESULT_STATUSES.join(', ')}`);
+      }
+      const asking = items.filter((item) => state.items[item.id]!.action === 'ask');
+      if (status === 'revise' && asking.length === 0) throw new HttpError(409, 'nothing is marked for the agent');
+      if (status === 'approved' && asking.length > 0) throw new HttpError(409, 'some items are still marked for the agent');
+      const missingNote = asking.find((item) => state.items[item.id]!.instructions.trim() === '');
+      if (status === 'revise' && missingNote) throw new HttpError(409, 'tell the agent what to change on every item you send back');
+      writeJson(files.results, buildResults(status as ResultStatus, drafts, items, state));
       send(response, 200, { ok: true });
-      options.onFinish?.(status);
+      options.onFinish?.(status as ResultStatus);
       return;
     }
 

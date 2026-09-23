@@ -6,6 +6,7 @@ const statusIcon: Record<ItemStatus, { icon: IconName; className: string; label:
   undecided: { icon: 'circle', className: 'text-fg-muted', label: 'Undecided' },
   send: { icon: 'checkCircle', className: 'text-success', label: 'Will send' },
   skip: { icon: 'skip', className: 'text-fg-muted', label: "Won't reply" },
+  ask: { icon: 'sparkle', className: 'text-done', label: 'Back to the agent' },
   posted: { icon: 'checkCircle', className: 'text-done', label: 'Posted' },
   failed: { icon: 'alert', className: 'text-danger', label: 'Failed to post' },
 };

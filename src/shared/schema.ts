@@ -44,12 +44,18 @@ export type Drafts = z.infer<typeof Drafts>;
 
 export const SUMMARY_ID = 'summary';
 
-export const Action = z.enum(['send', 'skip']);
+export const Action = z.enum(['send', 'skip', 'ask']);
 export type Action = z.infer<typeof Action>;
 
 export const ItemState = z.object({
   action: Action.nullable(),
   body: z.string(),
+  /** What the human wants the agent to change, when action is "ask". Never posted. */
+  instructions: z.string().default(''),
+  /** The draft this state was built from; a new draft on reopen means the agent reworked the item. */
+  basedOn: z.string().default(''),
+  /** The instructions from the round before, shown so the human can check the rework. */
+  lastAsk: z.string().nullable().default(null),
   postedUrl: z.string().nullable(),
   error: z.string().nullable(),
 });
@@ -60,7 +66,8 @@ export const SessionState = z.object({
 });
 export type SessionState = z.infer<typeof SessionState>;
 
-export type ResultStatus = 'done' | 'canceled';
+export const RESULT_STATUSES = ['approved', 'revise', 'canceled'] as const;
+export type ResultStatus = (typeof RESULT_STATUSES)[number];
 
 export interface ResultItem {
   id: string;
@@ -68,6 +75,7 @@ export interface ResultItem {
   commentId: number | null;
   action: Action | null;
   body: string;
+  instructions: string;
   postedUrl: string | null;
   error: string | null;
 }

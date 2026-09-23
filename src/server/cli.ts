@@ -1,23 +1,27 @@
 import { spawn } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
-import { existsSync, openSync, readFileSync } from 'node:fs';
+import { existsSync, openSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
 import type { Drafts, PullRequest, Results } from '../shared/schema';
-import { FakeGitHub, loadFixture } from './fake-github';
+import { FakeGit, FakeGitHub, loadFixture } from './fake-github';
 import { GhGitHub, type GitHub } from './github';
+import { CliGit } from './local-git';
+import { postApproved } from './post';
 import { startServer } from './server';
-import { ensureDir, parseDrafts, readJson, sessionFiles, writeJson, type ServerInfo } from './session';
+import { ensureDir, parseDrafts, readJson, sessionFiles, writeJson, type ServerInfo, type SessionMeta } from './session';
 
 const USAGE = `Usage: cli.mjs <command> [options]
 
 Commands:
   feedback [--pr <number|url>]         Print the PR's open review feedback as JSON
-  open <drafts.json> [--fixture <dir>] [--no-browser]
-                                       Start the review app for a drafts file and print { url, session }
-  wait <session> [--timeout <seconds>] Wait for the human to finish; exit 3 if still waiting
+  open <drafts.json> [--session <dir>] [--fixture <dir>] [--no-browser]
+                                       Start the review app and print { url, session }.
+                                       --session reopens an earlier session, keeping the human's choices
+  wait <session> [--timeout <seconds>] Wait for the human to finish a round; exit 3 if still waiting
+  post <session>                       Post the replies the human approved, after the fixes are pushed
 `;
 
 const EXIT_WAITING = 3;
@@ -106,16 +110,36 @@ async function commandFeedback(values: { pr?: string; fixture?: string }): Promi
   process.stdout.write(`${JSON.stringify(feedbackSummary(pr), null, 2)}\n`);
 }
 
-async function commandOpen(draftsPath: string | undefined, values: { fixture?: string; 'no-browser'?: boolean }): Promise<void> {
+async function commandOpen(
+  draftsPath: string | undefined,
+  values: { fixture?: string; session?: string; 'no-browser'?: boolean },
+): Promise<void> {
   if (!draftsPath) fail(USAGE);
   const drafts = parseDrafts(readJson(resolve(draftsPath)));
   const github = githubFor(values.fixture);
   await github.checkAuth();
 
   const { owner, repo, number } = drafts.pr;
-  const session = join(tmpdir(), 'code-review-feedback', `${owner}-${repo}-${number}-${randomBytes(4).toString('hex')}`);
-  ensureDir(session);
+  const session = values.session
+    ? resolve(values.session)
+    : join(tmpdir(), 'code-review-feedback', `${owner}-${repo}-${number}-${randomBytes(4).toString('hex')}`);
   const files = sessionFiles(session);
+  if (values.session) {
+    if (!existsSync(files.drafts)) fail(`${session} is not a review session.`);
+    const previous = parseDrafts(readJson(files.drafts)).pr;
+    if (previous.owner !== owner || previous.repo !== repo || previous.number !== number) {
+      fail(`${session} belongs to ${previous.owner}/${previous.repo}#${previous.number}, not this pull request.`);
+    }
+    if (existsSync(files.server)) {
+      const { pid } = readJson<ServerInfo>(files.server);
+      if (isRunning(pid)) process.kill(pid);
+    }
+    rmSync(files.server, { force: true });
+    rmSync(files.results, { force: true });
+  } else {
+    ensureDir(session);
+    writeJson(files.meta, { repoDir: process.cwd() } satisfies SessionMeta);
+  }
   writeJson(files.drafts, drafts);
 
   const log = openSync(files.log, 'a');
@@ -136,9 +160,13 @@ async function commandServe(session: string | undefined, values: { fixture?: str
   if (!session) fail(USAGE);
   const files = sessionFiles(session);
   const drafts: Drafts = parseDrafts(readJson(files.drafts));
+  const git = values.fixture
+    ? new FakeGit(loadFixture(resolve(values.fixture)))
+    : new CliGit(existsSync(files.meta) ? readJson<SessionMeta>(files.meta).repoDir : process.cwd());
   const running = await startServer({
     sessionDir: session,
     drafts,
+    git,
     github: githubFor(values.fixture),
     webDir: join(here, 'web'),
     fixture: Boolean(values.fixture),
@@ -168,12 +196,20 @@ async function commandWait(session: string | undefined, values: { timeout?: stri
   process.exit(EXIT_WAITING);
 }
 
+async function commandPost(session: string | undefined, values: { fixture?: string }): Promise<void> {
+  if (!session) fail(USAGE);
+  const outcomes = await postApproved(resolve(session), githubFor(values.fixture));
+  process.stdout.write(`${JSON.stringify(outcomes, null, 2)}\n`);
+  if (outcomes.some((outcome) => outcome.error)) process.exit(1);
+}
+
 async function main(): Promise<void> {
   const { positionals, values } = parseArgs({
     allowPositionals: true,
     options: {
       pr: { type: 'string' },
       fixture: { type: 'string' },
+      session: { type: 'string' },
       timeout: { type: 'string' },
       'no-browser': { type: 'boolean' },
       help: { type: 'boolean', short: 'h' },
@@ -193,6 +229,8 @@ async function main(): Promise<void> {
       return commandServe(target, values);
     case 'wait':
       return commandWait(target, values);
+    case 'post':
+      return commandPost(target, values);
     default:
       fail(USAGE);
   }

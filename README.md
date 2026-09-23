@@ -1,10 +1,11 @@
 # code-review-feedback
 
-An agent skill for working through a pull request's review feedback without letting the agent talk to your colleagues.
+An agent skill for working through a pull request's review feedback, where you stay in charge of every word that reaches your colleagues.
 
-The agent reads every unresolved review thread and PR comment, makes the fixes it judges right, and drafts a reply to each. Then it opens a local app that looks like the PR's "Files changed" tab: the diff hunk, the thread, what the agent did and why, and its draft reply. You edit, send, or skip each one, and the app posts what you send through `gh`, exactly as written.
+The agent reads every unresolved review thread and PR comment, makes the fixes it judges right as local commits, and drafts a reply to each. Then it opens a local app that looks like the PR's "Files changed" tab: each comment on its diff, the fix the agent applied, why it did it, and its draft reply. For each item you send the reply (edited however you like), skip it, or ask the agent to change something. Items you send back get reworked and the app reopens with your other choices kept. When you approve, the agent pushes the fixes and then posts exactly the replies you approved.
 
-- Keyboard-first for big PRs: `j`/`k` to move, `s` send, `x` skip, `e` edit, `⌘↵` send and move on.
+- Keyboard-first for big PRs: `j`/`k` to move, `s` send, `x` skip, `a` ask the agent, `e` edit, `⌘↵` send and move on.
+- A general comment on the PR, alongside the thread replies.
 - `@` autocomplete from the PR's participants, then the repo's mentionable users.
 - Preview rendered by GitHub's own markdown API.
 - GitHub's light and dark themes, following your OS.
@@ -25,10 +26,11 @@ Then, on a branch with an open PR, ask your agent to use `/code-review-feedback`
 The skill drives a small CLI at `skills/code-review-feedback/app/cli.mjs`:
 
 - `feedback` prints the PR's open feedback as JSON for the agent.
-- `open <drafts.json>` starts the local app on `127.0.0.1` with a random port and session token, and opens your browser.
-- `wait <session>` blocks until you finish (exit 3 means still waiting, so agents with tool timeouts can poll).
+- `open <drafts.json>` starts the local app on `127.0.0.1` with a random port and session token, and opens your browser. `--session <dir>` reopens an earlier session for the next round, keeping your choices.
+- `wait <session>` blocks until you finish a round (exit 3 means still waiting, so agents with tool timeouts can poll). The round ends `approved`, `revise`, or `canceled`.
+- `post <session>` posts the replies you approved, byte for byte from the app's saved state. The agent runs it only after pushing the fixes.
 
-Inline threads get in-thread replies. Top-level comments and review bodies can't be threaded on GitHub, so their replies post as new PR comments.
+Inline threads get in-thread replies. Top-level comments, review bodies, and the general comment post as new PR comments, since GitHub can't thread those.
 
 ## Development
 

@@ -1,4 +1,4 @@
-import type { Action, FilePatch, ItemState, ResultStatus, SessionPayload, SessionState, User } from '../shared/schema';
+import type { Action, FilePatch, ItemState, ResultStatus, SessionPayload, User } from '../shared/schema';
 
 const token = new URLSearchParams(window.location.search).get('token') ?? '';
 
@@ -17,11 +17,11 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 
 export const api = {
   session: () => request<SessionPayload>('GET', '/api/session'),
-  updateItem: (id: string, patch: { action?: Action | null; body?: string }) =>
+  updateItem: (id: string, patch: { action?: Action | null; body?: string; instructions?: string }) =>
     request<ItemState>('PUT', `/api/items/${encodeURIComponent(id)}`, patch),
   mentions: (query: string) => request<User[]>('GET', `/api/mentions?q=${encodeURIComponent(query)}`),
   preview: (text: string) => request<{ html: string }>('POST', '/api/preview', { text }),
   file: (path: string) => request<FilePatch>('GET', `/api/file?path=${encodeURIComponent(path)}`),
-  post: (ids: string[]) => request<SessionState>('POST', '/api/post', { ids }),
+  commit: (sha: string) => request<FilePatch[]>('GET', `/api/commit?sha=${encodeURIComponent(sha)}`),
   finish: (status: ResultStatus) => request<{ ok: true }>('POST', '/api/finish', { status }),
 };

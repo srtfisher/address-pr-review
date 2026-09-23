@@ -813,5 +813,142 @@
   ],
   "failOnce": [
     7000103
-  ]
+  ],
+  "commits": {
+    "a1b2c3d": [
+      {
+        "path": "src/checkout/cart-summary.tsx",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -10,5 +10,5 @@\n   const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   const value11 = computeLine(0, 11);\n-  if (!cart0.items.length) return null;\n+  if (!cart0.items.length > 0) return null;\n   const value13 = computeLine(0, 13);\n   // step 14: keep totals in cents until the very end"
+      }
+    ],
+    "a1b2c3e": [
+      {
+        "path": "src/checkout/cart-summary.tsx",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -33,5 +33,5 @@\n   if (!cart0.items.length) return null;\n   const value34 = computeLine(0, 34);\n-  // step 35: keep totals in cents until the very end\n+  // step 35: keep totals in cents until the very end\n \n   const value37 = computeLine(0, 37);"
+      }
+    ],
+    "a1b2c41": [
+      {
+        "path": "src/checkout/use-cart.ts",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -5,5 +5,5 @@\n   const subtotal5 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   if (!cart1.items.length) return null;\n-  // step 7: keep totals in cents until the very end\n+  // step 7: keep totals in cents until the very end\n   const value8 = computeLine(1, 8);\n "
+      }
+    ],
+    "a1b2c42": [
+      {
+        "path": "src/checkout/use-cart.ts",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -43,5 +43,5 @@\n   const value43 = computeLine(1, 43);\n   const value44 = computeLine(1, 44);\n-\n+\n   const value46 = computeLine(1, 46);\n   const value47 = computeLine(1, 47);"
+      }
+    ],
+    "a1b2c43": [
+      {
+        "path": "src/checkout/use-cart.ts",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -79,5 +79,5 @@\n   const value79 = computeLine(1, 79);\n   const subtotal80 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n-\n+\n   const value82 = computeLine(1, 82);\n   const value83 = computeLine(1, 83);"
+      }
+    ],
+    "a1b2c45": [
+      {
+        "path": "src/checkout/shipping-options.tsx",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -58,5 +58,5 @@\n   const value58 = computeLine(2, 58);\n   const value59 = computeLine(2, 59);\n-  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const subtotal60 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   const value61 = computeLine(2, 61);\n   const value62 = computeLine(2, 62);"
+      }
+    ],
+    "a1b2c46": [
+      {
+        "path": "src/checkout/shipping-options.tsx",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -108,5 +108,5 @@\n \n   const value109 = computeLine(2, 109);\n-  const subtotal110 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const subtotal110 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   if (!cart2.items.length) return null;\n   // step 112: keep totals in cents until the very end"
+      }
+    ],
+    "a1b2c49": [
+      {
+        "path": "src/lib/money.ts",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -38,5 +38,5 @@\n   const value38 = computeLine(3, 38);\n   if (!cart3.items.length) return null;\n-  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   const value41 = computeLine(3, 41);\n   // step 42: keep totals in cents until the very end"
+      }
+    ],
+    "a1b2c4b": [
+      {
+        "path": "src/lib/tax/rates.ts",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -53,5 +53,5 @@\n   const value53 = computeLine(4, 53);\n \n-  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const subtotal55 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   // step 56: keep totals in cents until the very end\n   if (!cart4.items.length) return null;"
+      }
+    ],
+    "a1b2c4c": [
+      {
+        "path": "src/api/orders/create.ts",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -20,5 +20,5 @@\n   const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   // step 21: keep totals in cents until the very end\n-  const value22 = computeLine(5, 22);\n+  const cents22 = computeLine(5, 22);\n   const value23 = computeLine(5, 23);\n   if (!cart5.items.length) return null;"
+      }
+    ],
+    "a1b2c4d": [
+      {
+        "path": "src/api/orders/create.ts",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -75,5 +75,5 @@\n   const subtotal75 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   const value76 = computeLine(5, 76);\n-  // step 77: keep totals in cents until the very end\n+  // step 77: keep totals in cents until the very end\n   if (!cart5.items.length) return null;\n   const value79 = computeLine(5, 79);"
+      }
+    ],
+    "a1b2c4f": [
+      {
+        "path": "src/components/price-tag.tsx",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -16,5 +16,5 @@\n   const value16 = computeLine(7, 16);\n   const value17 = computeLine(7, 17);\n-\n+\n   const value19 = computeLine(7, 19);\n   const subtotal20 = items.reduce((sum, item) => sum + item.price * item.qty, 0);"
+      }
+    ],
+    "a1b2c50": [
+      {
+        "path": "tests/checkout/cart-summary.test.tsx",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -38,5 +38,5 @@\n   const value38 = computeLine(8, 38);\n   if (!cart8.items.length) return null;\n-  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const subtotal40 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   const value41 = computeLine(8, 41);\n   // step 42: keep totals in cents until the very end"
+      }
+    ],
+    "a1b2c52": [
+      {
+        "path": "docs/checkout.md",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -10,5 +10,5 @@\n   const subtotal10 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   const value11 = computeLine(9, 11);\n-  if (!cart9.items.length) return null;\n+  if (!cart9.items.length > 0) return null;\n   const value13 = computeLine(9, 13);\n   // step 14: keep totals in cents until the very end"
+      }
+    ],
+    "b7e91f0": [
+      {
+        "path": "src/checkout/shipping-options.tsx",
+        "status": "modified",
+        "additions": 1,
+        "deletions": 1,
+        "patch": "@@ -48,5 +48,5 @@\n   if (!cart2.items.length) return null;\n   // step 49: keep totals in cents until the very end\n-  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n+  const subtotal50 = items.reduce((sum, item) => sum + item.price * item.qty, 0);\n   if (!cart2.items.length) return null;\n   const value52 = computeLine(2, 52);"
+      }
+    ]
+  }
 }

@@ -1,6 +1,6 @@
 import type { Decision, ItemState, SessionItem, User } from '../shared/schema';
 
-export type ItemStatus = 'undecided' | 'send' | 'skip' | 'posted' | 'failed';
+export type ItemStatus = 'undecided' | 'send' | 'skip' | 'ask' | 'posted' | 'failed';
 
 export function statusOf(state: ItemState): ItemStatus {
   if (state.postedUrl) return 'posted';

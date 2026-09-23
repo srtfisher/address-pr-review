@@ -11,13 +11,14 @@ interface Props {
   decided: number;
   total: number;
   sendCount: number;
+  askCount: number;
   fixture: boolean;
   theme: Theme;
   onTheme: (theme: Theme) => void;
   onReview: () => void;
 }
 
-export function Header({ pr, decided, total, sendCount, fixture, theme, onTheme, onReview }: Props) {
+export function Header({ pr, decided, total, sendCount, askCount, fixture, theme, onTheme, onReview }: Props) {
   const next = themeOrder[(themeOrder.indexOf(theme) + 1) % themeOrder.length]!;
   const percent = total ? Math.round((decided / total) * 100) : 0;
   return (
@@ -65,9 +66,11 @@ export function Header({ pr, decided, total, sendCount, fixture, theme, onTheme,
           <button
             type="button"
             onClick={onReview}
-            className="rounded-md border border-success-emphasis bg-success-emphasis px-3 py-1.5 text-sm font-medium text-white hover:bg-success-emphasis-hover"
+            className={`rounded-md border px-3 py-1.5 text-sm font-medium text-white ${
+              askCount ? 'border-done bg-done hover:opacity-90' : 'border-success-emphasis bg-success-emphasis hover:bg-success-emphasis-hover'
+            }`}
           >
-            {sendCount ? `Post ${sendCount} ${sendCount === 1 ? 'reply' : 'replies'}…` : 'Finish…'}
+            {askCount ? `Send ${askCount} back to the agent…` : sendCount ? `Approve ${sendCount} ${sendCount === 1 ? 'reply' : 'replies'}…` : 'Finish…'}
           </button>
         </div>
       </div>

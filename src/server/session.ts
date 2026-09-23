@@ -4,7 +4,6 @@ import {
   Drafts,
   SUMMARY_ID,
   SessionState,
-  type ItemState,
   type PullRequest,
   type ResultStatus,
   type Results,
@@ -18,7 +17,12 @@ export const sessionFiles = (dir: string) => ({
   results: join(dir, 'results.json'),
   server: join(dir, 'server.json'),
   log: join(dir, 'server.log'),
+  meta: join(dir, 'session.json'),
 });
+
+export interface SessionMeta {
+  repoDir: string;
+}
 
 export interface ServerInfo {
   url: string;
@@ -79,12 +83,30 @@ export function buildItems(drafts: Drafts, pr: PullRequest): SessionItem[] {
   return items;
 }
 
+/**
+ * State for a round. A saved item carries over unless the human sent it back
+ * to the agent or the agent redrafted it; then it starts over from the new
+ * draft, remembering what the human asked for. Posted replies never reset.
+ */
 export function initialState(items: SessionItem[], saved?: SessionState): SessionState {
   const state: SessionState = { items: {} };
   for (const item of items) {
     const blankComment = item.kind === 'summary' && item.draft.trim() === '';
-    const fresh: ItemState = { action: blankComment ? 'skip' : null, body: item.draft, postedUrl: null, error: null };
-    state.items[item.id] = saved?.items[item.id] ?? fresh;
+    const previous = saved?.items[item.id];
+    const reworked = previous !== undefined && (previous.action === 'ask' || previous.basedOn !== item.draft);
+    if (previous && (previous.postedUrl || !reworked)) {
+      state.items[item.id] = previous;
+      continue;
+    }
+    state.items[item.id] = {
+      action: blankComment ? 'skip' : null,
+      body: item.draft,
+      instructions: '',
+      basedOn: item.draft,
+      lastAsk: previous?.action === 'ask' ? previous.instructions : null,
+      postedUrl: null,
+      error: null,
+    };
   }
   return state;
 }
@@ -101,6 +123,7 @@ export function buildResults(status: ResultStatus, drafts: Drafts, items: Sessio
         commentId: item.commentId,
         action: itemState.action,
         body: itemState.body,
+        instructions: itemState.instructions,
         postedUrl: itemState.postedUrl,
         error: itemState.error,
       };

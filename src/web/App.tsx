@@ -41,10 +41,10 @@ export function App() {
   const [dialogOpen, setDialogOpen] = useState(false);
   const [finished, setFinished] = useState<ResultStatus | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
-  const [retrying, setRetrying] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
+  const instructionsRef = useRef<HTMLTextAreaElement | null>(null);
   const mainRef = useRef<HTMLElement | null>(null);
-  const pendingBodies = useRef(new Map<string, number>());
+  const pendingSaves = useRef(new Map<string, { timer: number; save: () => Promise<unknown> }>());
 
   useEffect(() => applyTheme(theme), [theme]);
 
@@ -66,7 +66,7 @@ export function App() {
   const selected = ordered.find((item) => item.id === selectedId) ?? null;
 
   const counts = useMemo(() => {
-    const result: Record<ItemStatus, number> = { undecided: 0, send: 0, skip: 0, posted: 0, failed: 0 };
+    const result: Record<ItemStatus, number> = { undecided: 0, send: 0, skip: 0, ask: 0, posted: 0, failed: 0 };
     for (const item of ordered) result[statusOf(state.items[item.id]!)]++;
     return result;
   }, [ordered, state]);
@@ -74,31 +74,44 @@ export function App() {
   const patchLocal = (id: string, patch: Partial<ItemState>) =>
     setState((current) => ({ items: { ...current.items, [id]: { ...current.items[id]!, ...patch } } }));
 
-  const persist = useCallback((id: string, patch: { action?: Action | null; body?: string }) => {
-    api
+  const persist = useCallback((id: string, patch: { action?: Action | null; body?: string; instructions?: string }) => {
+    return api
       .updateItem(id, patch)
       .then(() => setSaveError(null))
       .catch((error: Error) => setSaveError(error.message));
   }, []);
 
+  const saveLater = (id: string, field: 'body' | 'instructions', value: string) => {
+    const key = `${id}:${field}`;
+    window.clearTimeout(pendingSaves.current.get(key)?.timer);
+    const save = () => {
+      pendingSaves.current.delete(key);
+      return persist(id, { [field]: value });
+    };
+    pendingSaves.current.set(key, { timer: window.setTimeout(save, SAVE_DELAY_MS), save });
+  };
+
+  const flushSaves = async () => {
+    for (const { timer, save } of [...pendingSaves.current.values()]) {
+      window.clearTimeout(timer);
+      await save();
+    }
+  };
+
   const setBody = (id: string, body: string) => {
     patchLocal(id, { body, error: null });
-    window.clearTimeout(pendingBodies.current.get(id));
-    pendingBodies.current.set(
-      id,
-      window.setTimeout(() => {
-        pendingBodies.current.delete(id);
-        persist(id, { body });
-      }, SAVE_DELAY_MS),
-    );
+    saveLater(id, 'body', body);
+  };
+
+  const setInstructions = (id: string, instructions: string) => {
+    patchLocal(id, { instructions });
+    saveLater(id, 'instructions', instructions);
   };
 
   const setAction = (id: string, action: Action | null) => {
-    const body = state.items[id]!.body;
-    window.clearTimeout(pendingBodies.current.get(id));
-    pendingBodies.current.delete(id);
     patchLocal(id, { action, error: null });
-    persist(id, { action, body });
+    void flushSaves().then(() => persist(id, { action }));
+    if (action === 'ask') requestAnimationFrame(() => instructionsRef.current?.focus());
   };
 
   const visibleIds = useMemo(
@@ -131,6 +144,7 @@ export function App() {
       else if (event.key === 'k') move(-1);
       else if (event.key === 's') decideAndAdvance('send');
       else if (event.key === 'x') decideAndAdvance('skip');
+      else if (event.key === 'a' && selected && selected.kind !== 'summary' && selected.source.kind !== 'missing') setAction(selected.id, 'ask');
       else if (event.key === 'e') {
         event.preventDefault();
         const textarea = textareaRef.current;
@@ -148,32 +162,8 @@ export function App() {
     document.querySelector(`[data-item-id="${CSS.escape(selectedId ?? '')}"]`)?.scrollIntoView({ block: 'nearest' });
   }, [selectedId]);
 
-  const flushBodies = async () => {
-    const waiting = [...pendingBodies.current.keys()];
-    for (const id of waiting) {
-      window.clearTimeout(pendingBodies.current.get(id));
-      pendingBodies.current.delete(id);
-      await api.updateItem(id, { body: state.items[id]!.body });
-    }
-  };
-
-  const post = async (ids: string[]) => {
-    await flushBodies();
-    setState(await api.post(ids));
-  };
-
-  const retry = async () => {
-    if (!selected) return;
-    setRetrying(true);
-    try {
-      await post([selected.id]);
-    } finally {
-      setRetrying(false);
-    }
-  };
-
   const finish = async (status: ResultStatus) => {
-    await flushBodies();
+    await flushSaves();
     await api.finish(status);
     setDialogOpen(false);
     setFinished(status);
@@ -195,14 +185,27 @@ export function App() {
   }
 
   if (finished) {
+    const ending = {
+      approved: {
+        icon: 'checkCircle' as const,
+        tone: 'text-done',
+        title: 'Approved',
+        text: 'Your agent will push the fixes, then post your replies exactly as written. You can close this tab.',
+      },
+      revise: {
+        icon: 'sparkle' as const,
+        tone: 'text-done',
+        title: 'Sent back to the agent',
+        text: 'It will rework what you asked for and open a new page with your other choices kept. You can close this tab.',
+      },
+      canceled: { icon: 'skip' as const, tone: 'text-fg-muted', title: 'Session ended', text: 'Nothing was pushed or posted. You can close this tab.' },
+    }[finished];
     return (
       <div className="flex h-full items-center justify-center p-6">
         <div className="max-w-md text-center">
-          <Icon name={finished === 'done' ? 'checkCircle' : 'skip'} size={32} className={`mx-auto ${finished === 'done' ? 'text-done' : 'text-fg-muted'}`} />
-          <h1 className="mt-3 text-xl font-semibold">{finished === 'done' ? 'All set' : 'Session ended'}</h1>
-          <p className="mt-2 text-fg-muted">
-            {counts.posted} {counts.posted === 1 ? 'reply' : 'replies'} posted. Your agent has the results, and you can close this tab.
-          </p>
+          <Icon name={ending.icon} size={32} className={`mx-auto ${ending.tone}`} />
+          <h1 className="mt-3 text-xl font-semibold">{ending.title}</h1>
+          <p className="mt-2 text-fg-muted">{ending.text}</p>
           <a href={session.pr.url} target="_blank" rel="noreferrer" className="mt-4 inline-block text-accent hover:underline">
             Open the pull request
           </a>
@@ -220,6 +223,7 @@ export function App() {
         decided={decided}
         total={ordered.length}
         sendCount={counts.send + counts.failed}
+        askCount={counts.ask}
         fixture={session.fixture}
         theme={theme}
         onTheme={setTheme}
@@ -238,13 +242,12 @@ export function App() {
               key={selected.id}
               item={selected}
               state={state.items[selected.id]!}
-              pr={session.pr}
               textareaRef={textareaRef}
+              instructionsRef={instructionsRef}
               onBody={(body) => setBody(selected.id, body)}
+              onInstructions={(instructions) => setInstructions(selected.id, instructions)}
               onAction={(action) => setAction(selected.id, action)}
               onSendAndNext={() => decideAndAdvance('send')}
-              onRetry={retry}
-              retrying={retrying}
             />
           ) : (
             <p className="p-6 text-fg-muted">There is no feedback in this session.</p>
@@ -256,7 +259,6 @@ export function App() {
         items={ordered}
         state={state}
         onClose={() => setDialogOpen(false)}
-        onPost={post}
         onFinish={finish}
         onSelect={setSelectedId}
       />
