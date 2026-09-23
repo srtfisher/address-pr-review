@@ -15,7 +15,12 @@ The app lives next to this file. Below, `APP` means `node <this skill's director
 
 2. **Evaluate each item with rigor, not performed agreement.** If a `receiving-code-review` skill is available, use it. For each item decide: implement, decline with a clear technical reason, needs clarification, or just acknowledge. A suggestion can be wrong or rest on a misunderstanding; check it against the actual code before acting.
 
-3. **Implement the fixes you decided to make.** Make the minimal, root-cause change for each and keep edits scoped to what the feedback asks for. Run the relevant tests and linters and confirm they pass before calling anything fixed. Don't commit or push unless the human asks, but if your drafts say "fixed", tell the human the fixes aren't pushed yet so they can push before sending.
+3. **Implement the fixes, then commit and push them.** Replies go out only after the fixes are on the PR, so a reviewer who reads "fixed" can see it.
+   - Make the minimal, root-cause change for each item and keep edits scoped to what the feedback asks for.
+   - Run the relevant tests and linters and confirm they pass.
+   - Commit each independent fix on its own, in the repo's commit style, so each reply can link its commit. Fixes that touch the same lines can share a commit.
+   - Push to the PR's branch. Never force-push. If the push is rejected, the branch has moved on, or the tree had unrelated changes before you started, stop and tell the human instead of working around it.
+   - If the PR is part of a stack, say that the branches above it now need a rebase; don't do it yourself.
 
 4. **Write the drafts file** to a temporary path, one item per piece of feedback you're answering:
 
@@ -40,7 +45,7 @@ The app lives next to this file. Below, `APP` means `node <this skill's director
    ```
 
    - `kind` is `thread`, `comment`, or `review`, and `commentId` is copied from the feedback JSON. `lastSeenCommentId` lets the app warn when someone replied after you read the thread.
-   - `decision` is `implemented`, `declined`, `clarify`, or `acknowledged`. `rationale` is shown to the human, not posted, so be plain and specific. `commits` is optional.
+   - `decision` is `implemented`, `declined`, `clarify`, or `acknowledged`. `rationale` is shown to the human, not posted, so be plain and specific. `commits` lists the pushed commits for that item; the app links them.
    - Include a `summary` only when the thread replies leave something unsaid. The app always offers the human a general PR comment either way; without your draft it starts empty and skipped.
 
 5. **Draft the replies the way a human developer talks in a PR.** They post under the human's account. If a `humanizer` skill is available, apply it to every draft.
@@ -56,7 +61,7 @@ The app lives next to this file. Below, `APP` means `node <this skill's director
 
 7. **Wait for the human.** Run `APP wait <session>`. It blocks for up to nine minutes. Exit code 3 means they're still working, so run it again; keep going until it exits 0 with the results JSON. Don't do anything else with the PR meanwhile.
 
-8. **Report back** from the results: what you changed, which replies were posted (with their links), which were skipped, anything that failed to post, and open questions. If the status is `canceled`, say that nothing more was posted. Never post, re-post, or edit a reply yourself, and don't resolve threads; resolving is a reply too.
+8. **Report back** from the results: what you changed and pushed, which replies were posted (with their links), which were skipped, anything that failed to post, and open questions. If the status is `canceled`, say that nothing more was posted. Never post, re-post, or edit a reply yourself, and don't resolve threads; resolving is a reply too.
 
 ## Notes
 
