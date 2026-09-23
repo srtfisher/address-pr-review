@@ -4,6 +4,7 @@ import { api } from './api';
 import { Header, type Theme } from './components/Header';
 import { Icon } from './components/icons';
 import { ItemView } from './components/ItemView';
+import { ShortcutsDialog } from './components/ShortcutsDialog';
 import { Sidebar } from './components/Sidebar';
 import { SubmitDialog } from './components/SubmitDialog';
 import { groupItems, statusOf, type ItemStatus } from './model';
@@ -39,6 +40,7 @@ export function App() {
   const [filter, setFilter] = useState<'all' | 'undecided'>('all');
   const [theme, setTheme] = useState<Theme>(readTheme);
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [finished, setFinished] = useState<ResultStatus | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
@@ -139,8 +141,9 @@ export function App() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (dialogOpen || finished || event.metaKey || event.ctrlKey || event.altKey || isTyping(event.target)) return;
-      if (event.key === 'j') move(1);
+      if (dialogOpen || shortcutsOpen || finished || event.metaKey || event.ctrlKey || event.altKey || isTyping(event.target)) return;
+      if (event.key === '?') setShortcutsOpen(true);
+      else if (event.key === 'j') move(1);
       else if (event.key === 'k') move(-1);
       else if (event.key === 's') decideAndAdvance('send');
       else if (event.key === 'x') decideAndAdvance('skip');
@@ -248,12 +251,15 @@ export function App() {
               onInstructions={(instructions) => setInstructions(selected.id, instructions)}
               onAction={(action) => setAction(selected.id, action)}
               onSendAndNext={() => decideAndAdvance('send')}
+              onNext={visibleIds.indexOf(selected.id) < visibleIds.length - 1 ? () => move(1) : null}
+              onReview={() => setDialogOpen(true)}
             />
           ) : (
             <p className="p-6 text-fg-muted">There is no feedback in this session.</p>
           )}
         </main>
       </div>
+      <ShortcutsDialog open={shortcutsOpen} onClose={() => setShortcutsOpen(false)} />
       <SubmitDialog
         open={dialogOpen}
         items={ordered}

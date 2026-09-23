@@ -236,9 +236,11 @@ interface Props {
   onInstructions: (instructions: string) => void;
   onAction: (action: Action | null) => void;
   onSendAndNext: () => void;
+  onNext: (() => void) | null;
+  onReview: () => void;
 }
 
-export function ItemView({ item, state, textareaRef, instructionsRef, onBody, onInstructions, onAction, onSendAndNext }: Props) {
+export function ItemView({ item, state, textareaRef, instructionsRef, onBody, onInstructions, onAction, onSendAndNext, onNext, onReview }: Props) {
   const status = statusOf(state);
   const posted = status === 'posted';
   const missing = item.source.kind === 'missing';
@@ -345,7 +347,7 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
             <div className="flex flex-wrap items-center justify-end gap-2">
               <span className="mr-auto text-xs text-fg-muted">
                 <kbd className="font-mono">s</kbd> send · <kbd className="font-mono">x</kbd> skip · <kbd className="font-mono">a</kbd> ask agent ·{' '}
-                <kbd className="font-mono">e</kbd> edit · <kbd className="font-mono">j</kbd>/<kbd className="font-mono">k</kbd> next/previous
+                <kbd className="font-mono">e</kbd> edit · <kbd className="font-mono">j</kbd>/<kbd className="font-mono">k</kbd> next/previous · <kbd className="font-mono">?</kbd> all shortcuts
               </span>
               {choice('skip', 'skip', "Don't reply", "Won't reply", 'border-fg-muted bg-neutral-muted text-fg')}
               {!isComment &&
@@ -359,6 +361,29 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
                 missing || !state.body.trim(),
               )}
             </div>
+            {(state.action === 'send' || (isComment && state.action === 'skip')) && (
+              <div
+                role="status"
+                className={`flex flex-wrap items-center gap-2 rounded-md border px-4 py-2 text-sm ${
+                  state.action === 'send' ? 'border-success/40 bg-success-subtle' : 'border-border bg-canvas-subtle'
+                }`}
+              >
+                <Icon name={state.action === 'send' ? 'checkCircle' : 'skip'} className={`shrink-0 ${state.action === 'send' ? 'text-success' : 'text-fg-muted'}`} />
+                <span className="mr-auto">
+                  {state.action === 'send' ? 'Marked to send.' : 'No comment will be posted.'}
+                  {!onNext && ' That was the last one.'}
+                  {state.action === 'send' && ' Nothing posts until you finish the review.'}
+                </span>
+                <button
+                  type="button"
+                  onClick={onNext ?? onReview}
+                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-btn px-3 py-1.5 text-sm font-medium text-fg hover:bg-btn-hover"
+                >
+                  {onNext ? 'Next review note' : 'Review and finish'}
+                  <Icon name="arrowRight" size={14} />
+                </button>
+              </div>
+            )}
           </>
         )}
       </section>
