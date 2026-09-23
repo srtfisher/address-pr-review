@@ -137,7 +137,7 @@ function Source({ item }: { item: SessionItem }) {
   if (source.kind === 'summary') {
     return (
       <div className="rounded-md border border-border bg-canvas-subtle px-4 py-3 text-sm text-fg-muted">
-        This posts as a new comment on the pull request, after everything else. Use it for what the thread replies don't already cover, or skip it.
+        A new comment on the pull request, posted after the thread replies. Use it to say anything to the reviewers, or leave it skipped.
       </div>
     );
   }
@@ -209,9 +209,9 @@ export function ItemView({ item, state, pr, textareaRef, onBody, onAction, onSen
       <section aria-label="Your reply" className="space-y-2">
         <div className="flex items-center gap-2 text-sm">
           <Icon name="reply" className="text-fg-muted" />
-          <h2 className="font-semibold">Your reply</h2>
+          <h2 className="font-semibold">{item.kind === 'summary' ? 'Your comment' : 'Your reply'}</h2>
           <span className="text-fg-muted">· {target}</span>
-          {!posted && state.body !== item.draft && (
+          {!posted && item.draft !== '' && state.body !== item.draft && (
             <button type="button" onClick={() => onBody(item.draft)} className="ml-auto text-xs text-accent hover:underline">
               Reset to draft
             </button>
@@ -239,7 +239,7 @@ export function ItemView({ item, state, pr, textareaRef, onBody, onAction, onSen
               disabled={missing}
               textareaRef={textareaRef}
               onSubmitShortcut={onSendAndNext}
-              placeholder="Leave a reply"
+              placeholder={item.kind === 'summary' ? 'Say something to the reviewers' : 'Leave a reply'}
             />
             {state.error && (
               <div className="flex flex-wrap items-center gap-2 rounded-md border border-danger/40 bg-danger-subtle px-4 py-2 text-sm text-danger">

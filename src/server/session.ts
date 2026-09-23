@@ -65,26 +65,25 @@ export function buildItems(drafts: Drafts, pr: PullRequest): SessionItem[] {
       newActivity: item.lastSeenCommentId !== undefined && newestId !== null && newestId > item.lastSeenCommentId,
     };
   });
-  if (drafts.summary) {
-    items.push({
-      id: SUMMARY_ID,
-      kind: 'summary',
-      commentId: null,
-      decision: null,
-      rationale: '',
-      commits: [],
-      draft: drafts.summary.draft,
-      source: { kind: 'summary' },
-      newActivity: false,
-    });
-  }
+  items.push({
+    id: SUMMARY_ID,
+    kind: 'summary',
+    commentId: null,
+    decision: null,
+    rationale: '',
+    commits: [],
+    draft: drafts.summary?.draft ?? '',
+    source: { kind: 'summary' },
+    newActivity: false,
+  });
   return items;
 }
 
 export function initialState(items: SessionItem[], saved?: SessionState): SessionState {
   const state: SessionState = { items: {} };
   for (const item of items) {
-    const fresh: ItemState = { action: null, body: item.draft, postedUrl: null, error: null };
+    const blankComment = item.kind === 'summary' && item.draft.trim() === '';
+    const fresh: ItemState = { action: blankComment ? 'skip' : null, body: item.draft, postedUrl: null, error: null };
     state.items[item.id] = saved?.items[item.id] ?? fresh;
   }
   return state;

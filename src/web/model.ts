@@ -41,7 +41,7 @@ export function groupItems(items: SessionItem[]): Group[] {
       items: [...fileItems].sort((a, b) => lineOf(a) - lineOf(b)),
     }));
   if (conversation.length) groups.push({ key: 'conversation', label: 'Conversation', isFile: false, items: conversation });
-  if (summary.length) groups.push({ key: 'summary', label: 'Summary comment', isFile: false, items: summary });
+  if (summary.length) groups.push({ key: 'summary', label: 'General comment', isFile: false, items: summary });
   return groups;
 }
 
@@ -67,7 +67,7 @@ export function excerptOf(item: SessionItem): string {
         : item.source.kind === 'review'
           ? item.source.review.body
           : item.kind === 'summary'
-            ? 'A new top-level comment on the PR'
+            ? 'Say something to the reviewers'
             : 'This comment is no longer on the PR';
   return text.replace(/\s+/g, ' ').trim();
 }

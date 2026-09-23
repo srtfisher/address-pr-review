@@ -63,7 +63,7 @@ export function SubmitDialog({ open, items, state, onClose, onPost, onFinish, on
         <Icon name={tone === 'failed' ? 'alert' : 'reply'} className={`mt-0.5 shrink-0 ${tone === 'failed' ? 'text-danger' : 'text-fg-muted'}`} />
         <span className="min-w-0 flex-1 text-sm">
           <span className="block truncate text-xs text-fg-muted">
-            {item.kind === 'summary' ? 'Summary comment' : `${authorOf(item)?.login ?? 'ghost'}: ${excerptOf(item)}`}
+            {item.kind === 'summary' ? 'General comment' : `${authorOf(item)?.login ?? 'ghost'}: ${excerptOf(item)}`}
           </span>
           <span className="block truncate">{firstLine(state.items[item.id]!.body)}</span>
           {tone === 'failed' && <span className="block text-xs text-danger">{state.items[item.id]!.error}</span>}

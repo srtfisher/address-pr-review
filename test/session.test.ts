@@ -36,6 +36,14 @@ describe('buildItems', () => {
     expect(flagged).not.toContain(drafts.items[0]!.id);
   });
 
+  it('always offers a general comment, starting skipped when the agent drafted none', () => {
+    const withoutSummary = buildItems({ ...drafts, summary: null }, fixture.pr);
+    const general = withoutSummary.at(-1)!;
+    expect(general).toMatchObject({ id: 'summary', kind: 'summary', draft: '' });
+    expect(initialState(withoutSummary).items.summary).toMatchObject({ action: 'skip', body: '' });
+    expect(initialState(items).items.summary).toMatchObject({ action: null, body: drafts.summary!.draft });
+  });
+
   it('marks a draft whose comment no longer exists as missing', () => {
     const [item] = buildItems({ ...drafts, items: [{ ...drafts.items[0]!, commentId: 1 }], summary: null }, fixture.pr);
     expect(item!.source.kind).toBe('missing');

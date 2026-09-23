@@ -41,7 +41,7 @@ The app lives next to this file. Below, `APP` means `node <this skill's director
 
    - `kind` is `thread`, `comment`, or `review`, and `commentId` is copied from the feedback JSON. `lastSeenCommentId` lets the app warn when someone replied after you read the thread.
    - `decision` is `implemented`, `declined`, `clarify`, or `acknowledged`. `rationale` is shown to the human, not posted, so be plain and specific. `commits` is optional.
-   - Include a `summary` only when the thread replies leave something unsaid.
+   - Include a `summary` only when the thread replies leave something unsaid. The app always offers the human a general PR comment either way; without your draft it starts empty and skipped.
 
 5. **Draft the replies the way a human developer talks in a PR.** They post under the human's account. If a `humanizer` skill is available, apply it to every draft.
    - **Short by default.** One or two sentences: "Fixed." / "Good catch, done." / "Yeah, leftover from the refactor. Removed." Longer than three sentences needs a reason.
