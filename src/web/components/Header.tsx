@@ -1,5 +1,6 @@
 import type { PullRequest } from '../../shared/schema';
 import { Icon, type IconName } from './icons';
+import { Kbd } from './Kbd';
 
 export type Theme = 'system' | 'light' | 'dark';
 
@@ -68,11 +69,12 @@ export function Header({ pr, decided, total, sendCount, askCount, fixture, theme
             onClick={onReview}
             title="Review and finish (f)"
             aria-keyshortcuts="f"
-            className={`rounded-md border px-3 py-1.5 text-sm font-medium text-white ${
+            className={`inline-flex items-center rounded-md border px-3 py-1.5 text-sm font-medium text-white ${
               askCount ? 'border-done bg-done hover:opacity-90' : 'border-success-emphasis bg-success-emphasis hover:bg-success-emphasis-hover'
             }`}
           >
             {askCount ? `Send ${askCount} back to the agent…` : sendCount ? `Approve ${sendCount} ${sendCount === 1 ? 'reply' : 'replies'}…` : 'Finish…'}
+            <Kbd>f</Kbd>
           </button>
         </div>
       </div>

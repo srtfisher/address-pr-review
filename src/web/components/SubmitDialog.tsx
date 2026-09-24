@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import type { ResultStatus, SessionItem, SessionState } from '../../shared/schema';
 import { authorOf, excerptOf, statusOf } from '../model';
 import { Icon } from './icons';
+import { Kbd } from './Kbd';
 
 interface Props {
   open: boolean;
@@ -72,7 +73,7 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
     </li>
   );
 
-  const primary = 'rounded-md border px-3 py-1.5 text-sm font-medium text-white disabled:opacity-60';
+  const primary = 'inline-flex items-center rounded-md border px-3 py-1.5 text-sm font-medium text-white disabled:opacity-60';
 
   return (
     <dialog
@@ -143,6 +144,7 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
                 className={`${primary} border-done bg-done hover:opacity-90`}
               >
                 {busy ? 'Sending…' : `Send ${asking.length} back to the agent`}
+                <Kbd>↵</Kbd>
               </button>
             ) : (
               <button
@@ -153,6 +155,7 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
                 className={`${primary} border-success-emphasis bg-success-emphasis hover:bg-success-emphasis-hover`}
               >
                 {busy ? 'Approving…' : toSend.length ? `Approve ${toSend.length} ${toSend.length === 1 ? 'reply' : 'replies'}` : 'Approve with no replies'}
+                <Kbd>↵</Kbd>
               </button>
             )}
           </>

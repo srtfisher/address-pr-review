@@ -6,6 +6,7 @@ import { decisionLabel, decisionTone, lineLabel, statusOf } from '../model';
 import { CommentBox } from './CommentBox';
 import { DiffView } from './DiffView';
 import { Icon } from './icons';
+import { Kbd } from './Kbd';
 import { ReplyEditor } from './ReplyEditor';
 
 const CONTEXT_LINES = 6;
@@ -248,10 +249,11 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
   const target = item.kind === 'thread' ? 'Replies in this thread' : 'Posts as a new comment on the pull request';
   const focusPath = item.source.kind === 'thread' ? item.source.thread.path : null;
 
-  const choice = (action: Action, icon: 'skip' | 'sparkle' | 'check', idle: string, active: string, activeClass: string, disabled = false) => (
+  const choice = (action: Action, key: string, icon: 'skip' | 'sparkle' | 'check', idle: string, active: string, activeClass: string, disabled = false) => (
     <button
       type="button"
       aria-pressed={state.action === action}
+      aria-keyshortcuts={key}
       disabled={disabled}
       onClick={() => onAction(state.action === action ? null : action)}
       className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium disabled:cursor-not-allowed disabled:opacity-50 ${
@@ -260,6 +262,7 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
     >
       <Icon name={icon} size={14} />
       {state.action === action ? active : idle}
+      <Kbd>{key}</Kbd>
     </button>
   );
 
@@ -346,7 +349,6 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
             )}
             <div className="flex flex-wrap items-center justify-end gap-2">
               <span className="mr-auto text-xs text-fg-muted">
-                <kbd className="font-mono">s</kbd> send · <kbd className="font-mono">x</kbd> skip · <kbd className="font-mono">a</kbd> ask agent ·{' '}
                 <kbd className="font-mono">e</kbd> edit · <kbd className="font-mono">j</kbd>/<kbd className="font-mono">k</kbd> next/previous · <kbd className="font-mono">?</kbd> all shortcuts
               </span>
               {state.action === 'ask' ? (
@@ -361,18 +363,21 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
                   <button
                     type="button"
                     onClick={onReview}
+                    aria-keyshortcuts="f"
                     className="inline-flex items-center gap-1.5 rounded-md border border-done bg-done-subtle px-3 py-1.5 text-sm font-medium text-done"
                   >
                     <Icon name="sparkle" size={14} />
                     Send back to the agent…
+                    <Kbd>f</Kbd>
                   </button>
                 </>
               ) : (
                 <>
-                  {choice('skip', 'skip', "Don't reply", "Won't reply", 'border-fg-muted bg-neutral-muted text-fg')}
-                  {!isComment && choice('ask', 'sparkle', 'Ask agent to change', 'Back to the agent', 'border-done bg-done-subtle text-done', missing)}
+                  {choice('skip', 'x', 'skip', "Don't reply", "Won't reply", 'border-fg-muted bg-neutral-muted text-fg')}
+                  {!isComment && choice('ask', 'a', 'sparkle', 'Ask agent to change', 'Back to the agent', 'border-done bg-done-subtle text-done', missing)}
                   {choice(
                     'send',
+                    's',
                     'check',
                     isComment ? 'Send this comment' : 'Send this reply',
                     'Will send',
@@ -398,10 +403,12 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
                 <button
                   type="button"
                   onClick={onNext ?? onReview}
+                  aria-keyshortcuts={onNext ? 'j' : 'f'}
                   className="inline-flex items-center gap-1.5 rounded-md border border-border bg-btn px-3 py-1.5 text-sm font-medium text-fg hover:bg-btn-hover"
                 >
                   {onNext ? 'Next review note' : 'Review and finish'}
                   <Icon name="arrowRight" size={14} />
+                  <Kbd>{onNext ? 'j' : 'f'}</Kbd>
                 </button>
               </div>
             )}
