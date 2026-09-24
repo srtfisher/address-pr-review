@@ -66,6 +66,8 @@ export function Header({ pr, decided, total, sendCount, askCount, fixture, theme
           <button
             type="button"
             onClick={onReview}
+            title="Review and finish (f)"
+            aria-keyshortcuts="f"
             className={`rounded-md border px-3 py-1.5 text-sm font-medium text-white ${
               askCount ? 'border-done bg-done hover:opacity-90' : 'border-success-emphasis bg-success-emphasis hover:bg-success-emphasis-hover'
             }`}

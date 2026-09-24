@@ -147,6 +147,7 @@ export function App() {
       else if (event.key === 'k') move(-1);
       else if (event.key === 's') decideAndAdvance('send');
       else if (event.key === 'x') decideAndAdvance('skip');
+      else if (event.key === 'f') setDialogOpen(true);
       else if (event.key === 'a' && selected && selected.kind !== 'summary' && selected.source.kind !== 'missing') setAction(selected.id, 'ask');
       else if (event.key === 'e') {
         event.preventDefault();

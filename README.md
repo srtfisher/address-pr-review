@@ -6,7 +6,7 @@ The agent reads every unresolved review thread and PR comment, makes the fixes i
 
 ![A review comment with the agent's take, the fix it committed, and its draft reply](docs/screenshots/review-dark.png)
 
-- Keyboard-first for big PRs: `j`/`k` to move, `s` send, `x` skip, `a` ask the agent, `e` edit, `⌘↵` send and move on, `?` for the full list.
+- Keyboard-first for big PRs: `j`/`k` to move, `s` send, `x` skip, `a` ask the agent, `e` edit, `f` review and finish (then `↵` to approve), `⌘↵` send and move on, `?` for the full list.
 - Marking a reply to send (or deciding the general comment) shows a button to the next item, or to finishing the review on the last one.
 - A general comment on the PR, alongside the thread replies.
 - `@` autocomplete from the PR's participants, then the repo's mentionable users.

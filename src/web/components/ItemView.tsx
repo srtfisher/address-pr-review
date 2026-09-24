@@ -361,7 +361,7 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
                 missing || !state.body.trim(),
               )}
             </div>
-            {(state.action === 'send' || (isComment && state.action === 'skip')) && (
+            {(state.action === 'send' || state.action === 'skip') && (
               <div
                 role="status"
                 className={`flex flex-wrap items-center gap-2 rounded-md border px-4 py-2 text-sm ${
@@ -370,7 +370,7 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
               >
                 <Icon name={state.action === 'send' ? 'checkCircle' : 'skip'} className={`shrink-0 ${state.action === 'send' ? 'text-success' : 'text-fg-muted'}`} />
                 <span className="mr-auto">
-                  {state.action === 'send' ? 'Marked to send.' : 'No comment will be posted.'}
+                  {state.action === 'send' ? 'Marked to send.' : isComment ? 'No comment will be posted.' : 'No reply will be posted.'}
                   {!onNext && ' That was the last one.'}
                   {state.action === 'send' && ' Nothing posts until you finish the review.'}
                 </span>

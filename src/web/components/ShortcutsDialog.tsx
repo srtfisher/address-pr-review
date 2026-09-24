@@ -11,6 +11,7 @@ const groups: { title: string; shortcuts: { keys: string[]; label: string }[] }[
       { keys: ['x'], label: "Don't reply and move on" },
       { keys: ['a'], label: 'Ask the agent to change it' },
       { keys: ['e'], label: 'Edit the reply' },
+      { keys: ['f'], label: 'Review and finish' },
       { keys: ['?'], label: 'Show keyboard shortcuts' },
     ],
   },

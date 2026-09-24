@@ -16,6 +16,7 @@ const firstLine = (text: string) => text.trim().split('\n')[0] ?? '';
 
 export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }: Props) {
   const dialog = useRef<HTMLDialogElement>(null);
+  const primaryRef = useRef<HTMLButtonElement>(null);
   const [busy, setBusy] = useState(false);
   const [confirmCancel, setConfirmCancel] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -27,6 +28,7 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
       setConfirmCancel(false);
       setError(null);
       element.showModal();
+      primaryRef.current?.focus();
     }
     if (!open && element.open) element.close();
   }, [open]);
@@ -133,6 +135,7 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
             </button>
             {revising ? (
               <button
+                ref={primaryRef}
                 type="button"
                 disabled={busy || missingNotes.length > 0}
                 title={missingNotes.length ? 'Every item sent back needs a note for the agent' : undefined}
@@ -143,6 +146,7 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
               </button>
             ) : (
               <button
+                ref={primaryRef}
                 type="button"
                 disabled={busy}
                 onClick={() => finish('approved')}
