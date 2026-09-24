@@ -349,16 +349,37 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
                 <kbd className="font-mono">s</kbd> send · <kbd className="font-mono">x</kbd> skip · <kbd className="font-mono">a</kbd> ask agent ·{' '}
                 <kbd className="font-mono">e</kbd> edit · <kbd className="font-mono">j</kbd>/<kbd className="font-mono">k</kbd> next/previous · <kbd className="font-mono">?</kbd> all shortcuts
               </span>
-              {choice('skip', 'skip', "Don't reply", "Won't reply", 'border-fg-muted bg-neutral-muted text-fg')}
-              {!isComment &&
-                choice('ask', 'sparkle', 'Ask agent to change', 'Back to the agent', 'border-done bg-done-subtle text-done', missing)}
-              {choice(
-                'send',
-                'check',
-                isComment ? 'Send this comment' : 'Send this reply',
-                'Will send',
-                'border-success-emphasis bg-success-emphasis text-white hover:bg-success-emphasis-hover',
-                missing || !state.body.trim(),
+              {state.action === 'ask' ? (
+                <>
+                  <button
+                    type="button"
+                    onClick={() => onAction(null)}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-border bg-btn px-3 py-1.5 text-sm font-medium text-fg hover:bg-btn-hover"
+                  >
+                    Cancel
+                  </button>
+                  <button
+                    type="button"
+                    onClick={onReview}
+                    className="inline-flex items-center gap-1.5 rounded-md border border-done bg-done-subtle px-3 py-1.5 text-sm font-medium text-done"
+                  >
+                    <Icon name="sparkle" size={14} />
+                    Send back to the agent…
+                  </button>
+                </>
+              ) : (
+                <>
+                  {choice('skip', 'skip', "Don't reply", "Won't reply", 'border-fg-muted bg-neutral-muted text-fg')}
+                  {!isComment && choice('ask', 'sparkle', 'Ask agent to change', 'Back to the agent', 'border-done bg-done-subtle text-done', missing)}
+                  {choice(
+                    'send',
+                    'check',
+                    isComment ? 'Send this comment' : 'Send this reply',
+                    'Will send',
+                    'border-success-emphasis bg-success-emphasis text-white hover:bg-success-emphasis-hover',
+                    missing || !state.body.trim(),
+                  )}
+                </>
               )}
             </div>
             {(state.action === 'send' || state.action === 'skip') && (

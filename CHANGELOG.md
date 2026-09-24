@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- While an item is marked to go back to the agent, its buttons are now "Cancel" and "Send back to the agent…", which opens the finish dialog. Clicking "Back to the agent" used to undo the choice instead.
+
 ## 0.4.0
 
 - Choosing "Don't reply" on a thread now shows the confirmation note with a "Next review note" button, the same as sending does.

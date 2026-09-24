@@ -41,6 +41,10 @@ Then, on a branch with an open PR, ask your agent to use `/address-pr-review`, o
 
    ![The finish dialog, summarizing what gets sent, skipped, and reworked](docs/screenshots/finish-dialog.png)
 
+   A reworked item shows what you asked for next to the agent's new take and draft, ready for you to decide again.
+
+   ![A reworked item after the app reopens, showing the note you sent the agent](docs/screenshots/reworked-light.png)
+
 4. Once you approve, the agent pushes the fixes and posts your replies.
 
 ## How it works
