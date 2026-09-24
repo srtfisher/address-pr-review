@@ -1,6 +1,6 @@
 # Changelog
 
-## Unreleased
+## 0.5.0
 
 - Buttons show their keyboard shortcut in a small key box, so you can learn them as you go.
 - While an item is marked to go back to the agent, its buttons are now "Cancel" and "Send back to the agent…", which opens the finish dialog. Clicking "Back to the agent" used to undo the choice instead.
