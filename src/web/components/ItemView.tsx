@@ -248,6 +248,7 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
   const isComment = item.kind === 'summary';
   const target = item.kind === 'thread' ? 'Replies in this thread' : 'Posts as a new comment on the pull request';
   const focusPath = item.source.kind === 'thread' ? item.source.thread.path : null;
+  const split = item.source.kind === 'thread' || item.commits.length > 0;
 
   const choice = (action: Action, key: string, icon: 'skip' | 'sparkle' | 'check', idle: string, active: string, activeClass: string, disabled = false) => (
     <button
@@ -267,154 +268,165 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
   );
 
   return (
-    <article className="mx-auto max-w-4xl space-y-4 px-6 py-6">
-      <Source item={item} />
-
-      {item.newActivity && (
-        <div className="flex gap-2 rounded-md border border-attention/40 bg-attention-subtle px-4 py-3 text-sm">
-          <Icon name="alert" className="mt-0.5 shrink-0 text-attention" />
-          <span>There are new replies since this draft was written. Read them before you send.</span>
-        </div>
-      )}
-
-      {state.lastAsk && (
-        <div className="rounded-md border border-done/40 bg-done-subtle px-4 py-3 text-sm">
-          <p className="mb-1 flex items-center gap-2 font-semibold text-done">
-            <Icon name="sparkle" /> Reworked by the agent. You asked:
-          </p>
-          <p className="whitespace-pre-wrap">{state.lastAsk}</p>
-        </div>
-      )}
-
-      <AgentCard item={item} />
-
-      {item.commits.length > 0 && <AppliedFix commits={item.commits} focusPath={focusPath} />}
-
-      <section aria-label={isComment ? 'Your comment' : 'Your reply'} className="space-y-2">
-        <div className="flex items-center gap-2 text-sm">
-          <Icon name="reply" className="text-fg-muted" />
-          <h2 className="font-semibold">{isComment ? 'Your comment' : 'Your reply'}</h2>
-          <span className="text-fg-muted">· {target}</span>
-          {!posted && item.draft !== '' && state.body !== item.draft && (
-            <button type="button" onClick={() => onBody(item.draft)} className="ml-auto text-xs text-accent hover:underline">
-              Reset to draft
-            </button>
-          )}
-        </div>
-
-        {posted ? (
-          <div className="space-y-2">
-            <div className="flex items-center gap-2 rounded-md border border-done/40 bg-done-subtle px-4 py-2 text-sm text-done">
-              <Icon name="checkCircle" />
-              Posted.
-              <a href={state.postedUrl!} target="_blank" rel="noreferrer" className="font-medium underline">
-                View on GitHub
-              </a>
-            </div>
-            <div className="rounded-md border border-border px-4 py-3">
-              <pre className="font-sans text-sm whitespace-pre-wrap">{state.body}</pre>
-            </div>
+    <article
+      className={`mx-auto flex max-w-4xl flex-col gap-4 px-6 py-6 ${
+        split ? '3xl:grid 3xl:max-w-none 3xl:grid-cols-[minmax(0,1fr)_36rem] 3xl:items-start 3xl:gap-6' : ''
+      }`}
+    >
+      <div className={split ? 'contents 3xl:flex 3xl:min-w-0 3xl:flex-col 3xl:gap-4' : 'contents'}>
+        <Source item={item} />
+        {item.commits.length > 0 && (
+          <div className="order-1 3xl:order-none">
+            <AppliedFix commits={item.commits} focusPath={focusPath} />
           </div>
-        ) : (
-          <>
-            <ReplyEditor
-              value={state.body}
-              onChange={onBody}
-              disabled={missing}
-              textareaRef={textareaRef}
-              onSubmitShortcut={onSendAndNext}
-              placeholder={isComment ? 'Say something to the reviewers' : 'Leave a reply'}
-            />
-            {state.error && (
-              <div className="flex items-center gap-2 rounded-md border border-danger/40 bg-danger-subtle px-4 py-2 text-sm text-danger">
-                <Icon name="alert" className="shrink-0" />
-                <span>Posting failed last time: {state.error}</span>
-              </div>
+        )}
+      </div>
+
+      <div className={split ? 'contents 3xl:sticky 3xl:top-6 3xl:flex 3xl:flex-col 3xl:gap-4' : 'contents'}>
+        {item.newActivity && (
+          <div className="flex gap-2 rounded-md border border-attention/40 bg-attention-subtle px-4 py-3 text-sm">
+            <Icon name="alert" className="mt-0.5 shrink-0 text-attention" />
+            <span>There are new replies since this draft was written. Read them before you send.</span>
+          </div>
+        )}
+
+        {state.lastAsk && (
+          <div className="rounded-md border border-done/40 bg-done-subtle px-4 py-3 text-sm">
+            <p className="mb-1 flex items-center gap-2 font-semibold text-done">
+              <Icon name="sparkle" /> Reworked by the agent. You asked:
+            </p>
+            <p className="whitespace-pre-wrap">{state.lastAsk}</p>
+          </div>
+        )}
+
+        <AgentCard item={item} />
+
+        <section aria-label={isComment ? 'Your comment' : 'Your reply'} className="order-2 space-y-2 3xl:order-none">
+          <div className="flex items-center gap-2 text-sm">
+            <Icon name="reply" className="text-fg-muted" />
+            <h2 className="font-semibold">{isComment ? 'Your comment' : 'Your reply'}</h2>
+            <span className="text-fg-muted">· {target}</span>
+            {!posted && item.draft !== '' && state.body !== item.draft && (
+              <button type="button" onClick={() => onBody(item.draft)} className="ml-auto text-xs text-accent hover:underline">
+                Reset to draft
+              </button>
             )}
-            {state.action === 'ask' && (
-              <div className="rounded-md border border-done/40 bg-done-subtle p-3">
-                <label htmlFor={`ask-${item.id}`} className="mb-1.5 flex items-center gap-2 text-sm font-semibold">
-                  <Icon name="sparkle" className="text-done" /> What should the agent change?
-                </label>
-                <textarea
-                  id={`ask-${item.id}`}
-                  ref={instructionsRef}
-                  value={state.instructions}
-                  onChange={(event) => onInstructions(event.target.value)}
-                  placeholder="For example: revert this, the old message was fine. Or: implement it, but keep the constant."
-                  className="block min-h-24 w-full resize-y rounded-md border border-border bg-canvas px-3 py-2 text-sm outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis"
-                />
-                <p className="mt-1.5 text-xs text-fg-muted">Only the agent sees this. It reworks the item and reopens this page, keeping your other choices.</p>
+          </div>
+
+          {posted ? (
+            <div className="space-y-2">
+              <div className="flex items-center gap-2 rounded-md border border-done/40 bg-done-subtle px-4 py-2 text-sm text-done">
+                <Icon name="checkCircle" />
+                Posted.
+                <a href={state.postedUrl!} target="_blank" rel="noreferrer" className="font-medium underline">
+                  View on GitHub
+                </a>
               </div>
-            )}
-            <div className="flex flex-wrap items-center justify-end gap-2">
-              <span className="mr-auto text-xs text-fg-muted">
-                <kbd className="font-mono">e</kbd> edit · <kbd className="font-mono">j</kbd>/<kbd className="font-mono">k</kbd> next/previous · <kbd className="font-mono">?</kbd> all shortcuts
-              </span>
-              {state.action === 'ask' ? (
-                <>
+              <div className="rounded-md border border-border px-4 py-3">
+                <pre className="font-sans text-sm whitespace-pre-wrap">{state.body}</pre>
+              </div>
+            </div>
+          ) : (
+            <>
+              <ReplyEditor
+                value={state.body}
+                onChange={onBody}
+                disabled={missing}
+                textareaRef={textareaRef}
+                onSubmitShortcut={onSendAndNext}
+                placeholder={isComment ? 'Say something to the reviewers' : 'Leave a reply'}
+              />
+              {state.error && (
+                <div className="flex items-center gap-2 rounded-md border border-danger/40 bg-danger-subtle px-4 py-2 text-sm text-danger">
+                  <Icon name="alert" className="shrink-0" />
+                  <span>Posting failed last time: {state.error}</span>
+                </div>
+              )}
+              {state.action === 'ask' && (
+                <div className="rounded-md border border-done/40 bg-done-subtle p-3">
+                  <label htmlFor={`ask-${item.id}`} className="mb-1.5 flex items-center gap-2 text-sm font-semibold">
+                    <Icon name="sparkle" className="text-done" /> What should the agent change?
+                  </label>
+                  <textarea
+                    id={`ask-${item.id}`}
+                    ref={instructionsRef}
+                    value={state.instructions}
+                    onChange={(event) => onInstructions(event.target.value)}
+                    placeholder="For example: revert this, the old message was fine. Or: implement it, but keep the constant."
+                    className="block min-h-24 w-full resize-y rounded-md border border-border bg-canvas px-3 py-2 text-sm outline-none focus:border-accent-emphasis focus:ring-1 focus:ring-accent-emphasis"
+                  />
+                  <p className="mt-1.5 text-xs text-fg-muted">Only the agent sees this. It reworks the item and reopens this page, keeping your other choices.</p>
+                </div>
+              )}
+              <div className="flex flex-wrap items-center justify-end gap-2">
+                <span className={`mr-auto text-xs text-fg-muted ${split ? '3xl:basis-full' : ''}`}>
+                  <kbd className="font-mono">e</kbd> edit · <kbd className="font-mono">j</kbd>/<kbd className="font-mono">k</kbd> next/previous · <kbd className="font-mono">?</kbd> all shortcuts
+                </span>
+                {state.action === 'ask' ? (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => onAction(null)}
+                      className="inline-flex items-center gap-1.5 rounded-md border border-border bg-btn px-3 py-1.5 text-sm font-medium text-fg hover:bg-btn-hover"
+                    >
+                      Cancel
+                    </button>
+                    <button
+                      type="button"
+                      onClick={onReview}
+                      aria-keyshortcuts="f"
+                      className="inline-flex items-center gap-1.5 rounded-md border border-done bg-done-subtle px-3 py-1.5 text-sm font-medium text-done"
+                    >
+                      <Icon name="sparkle" size={14} />
+                      Send back to the agent…
+                      <Kbd>f</Kbd>
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    {choice('skip', 'x', 'skip', "Don't reply", "Won't reply", 'border-fg-muted bg-neutral-muted text-fg')}
+                    {!isComment && choice('ask', 'a', 'sparkle', 'Ask agent to change', 'Back to the agent', 'border-done bg-done-subtle text-done', missing)}
+                    {choice(
+                      'send',
+                      's',
+                      'check',
+                      isComment ? 'Send this comment' : 'Send this reply',
+                      'Will send',
+                      'border-success-emphasis bg-success-emphasis text-white hover:bg-success-emphasis-hover',
+                      missing || !state.body.trim(),
+                    )}
+                  </>
+                )}
+              </div>
+              {(state.action === 'send' || state.action === 'skip') && (
+                <div
+                  role="status"
+                  className={`flex flex-wrap items-center gap-2 rounded-md border px-4 py-2 text-sm ${
+                    state.action === 'send' ? 'border-success/40 bg-success-subtle' : 'border-border bg-canvas-subtle'
+                  }`}
+                >
+                  <Icon name={state.action === 'send' ? 'checkCircle' : 'skip'} className={`shrink-0 ${state.action === 'send' ? 'text-success' : 'text-fg-muted'}`} />
+                  <span className="mr-auto">
+                    {state.action === 'send' ? 'Marked to send.' : isComment ? 'No comment will be posted.' : 'No reply will be posted.'}
+                    {!onNext && ' That was the last one.'}
+                    {state.action === 'send' && ' Nothing posts until you finish the review.'}
+                  </span>
                   <button
                     type="button"
-                    onClick={() => onAction(null)}
+                    onClick={onNext ?? onReview}
+                    aria-keyshortcuts={onNext ? 'j' : 'f'}
                     className="inline-flex items-center gap-1.5 rounded-md border border-border bg-btn px-3 py-1.5 text-sm font-medium text-fg hover:bg-btn-hover"
                   >
-                    Cancel
+                    {onNext ? 'Next review note' : 'Review and finish'}
+                    <Icon name="arrowRight" size={14} />
+                    <Kbd>{onNext ? 'j' : 'f'}</Kbd>
                   </button>
-                  <button
-                    type="button"
-                    onClick={onReview}
-                    aria-keyshortcuts="f"
-                    className="inline-flex items-center gap-1.5 rounded-md border border-done bg-done-subtle px-3 py-1.5 text-sm font-medium text-done"
-                  >
-                    <Icon name="sparkle" size={14} />
-                    Send back to the agent…
-                    <Kbd>f</Kbd>
-                  </button>
-                </>
-              ) : (
-                <>
-                  {choice('skip', 'x', 'skip', "Don't reply", "Won't reply", 'border-fg-muted bg-neutral-muted text-fg')}
-                  {!isComment && choice('ask', 'a', 'sparkle', 'Ask agent to change', 'Back to the agent', 'border-done bg-done-subtle text-done', missing)}
-                  {choice(
-                    'send',
-                    's',
-                    'check',
-                    isComment ? 'Send this comment' : 'Send this reply',
-                    'Will send',
-                    'border-success-emphasis bg-success-emphasis text-white hover:bg-success-emphasis-hover',
-                    missing || !state.body.trim(),
-                  )}
-                </>
+                </div>
               )}
-            </div>
-            {(state.action === 'send' || state.action === 'skip') && (
-              <div
-                role="status"
-                className={`flex flex-wrap items-center gap-2 rounded-md border px-4 py-2 text-sm ${
-                  state.action === 'send' ? 'border-success/40 bg-success-subtle' : 'border-border bg-canvas-subtle'
-                }`}
-              >
-                <Icon name={state.action === 'send' ? 'checkCircle' : 'skip'} className={`shrink-0 ${state.action === 'send' ? 'text-success' : 'text-fg-muted'}`} />
-                <span className="mr-auto">
-                  {state.action === 'send' ? 'Marked to send.' : isComment ? 'No comment will be posted.' : 'No reply will be posted.'}
-                  {!onNext && ' That was the last one.'}
-                  {state.action === 'send' && ' Nothing posts until you finish the review.'}
-                </span>
-                <button
-                  type="button"
-                  onClick={onNext ?? onReview}
-                  aria-keyshortcuts={onNext ? 'j' : 'f'}
-                  className="inline-flex items-center gap-1.5 rounded-md border border-border bg-btn px-3 py-1.5 text-sm font-medium text-fg hover:bg-btn-hover"
-                >
-                  {onNext ? 'Next review note' : 'Review and finish'}
-                  <Icon name="arrowRight" size={14} />
-                  <Kbd>{onNext ? 'j' : 'f'}</Kbd>
-                </button>
-              </div>
-            )}
-          </>
-        )}
-      </section>
+            </>
+          )}
+        </section>
+      </div>
     </article>
   );
 }

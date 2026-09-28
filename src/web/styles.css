@@ -111,6 +111,10 @@
   --gh-diff-selected-num: rgb(187 128 9 / 0.4);
 }
 
+@theme {
+  --breakpoint-3xl: 110rem;
+}
+
 @theme inline {
   --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans', Helvetica, Arial, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji';
   --font-mono: ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, 'Liberation Mono', monospace;

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.7.0
+
+- On very wide screens (1760px and up), an item with a diff shows your reply in a column beside the code instead of below it.
+
 ## 0.6.0
 
 - Type `:` and a couple of letters in a reply to pick an emoji, like on GitHub. It inserts the emoji character.
