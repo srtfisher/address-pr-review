@@ -21,7 +21,7 @@ node test/fixtures/generate.ts    # regenerate test/fixtures/large-pr/*.json
 
 `skills/address-pr-review/app/` is build output and is committed so installs work without a build. After any change under `src/`, run `npm run build` and commit the result; CI and the release workflow fail if it's stale.
 
-The tests cover the server, session, posting, GitHub, and parsing code only; there are no UI tests. Verify UI changes in the fixture app: `node skills/address-pr-review/app/cli.mjs open test/fixtures/large-pr/drafts.json --fixture test/fixtures/large-pr --no-browser` prints `{ url, session }`. To see a second round, finish with "send back", edit a copy of the drafts file, and reopen with `--session <session>`. The README screenshots (`docs/screenshots/`, 1440×1080) come from this fixture.
+The tests cover the server, session, posting, GitHub, and parsing code only; there are no UI tests. Verify UI changes in the fixture app: `node skills/address-pr-review/app/cli.mjs open test/fixtures/large-pr/drafts.json --fixture test/fixtures/large-pr --no-browser` prints `{ url, session }`. To see a second round, finish with "send back", edit a copy of the drafts file, and reopen with `--session <session>`. The README screenshots (`docs/screenshots/`, 1440×1080, except `wide-dark.png` at 1920×1080 with 2x scale) come from this fixture.
 
 ## Architecture
 

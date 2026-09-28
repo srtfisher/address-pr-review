@@ -14,6 +14,9 @@ The agent reads every unresolved review thread and PR comment, makes the fixes i
 - Preview rendered by GitHub's own markdown API.
 - GitHub's light and dark themes, following your OS unless you pick one in the header.
 - Edits autosave, and a failed post can be retried without double posting.
+- On very wide screens (1760px and up), your reply sits in a column beside the diff, and stays in view while you scroll the code.
+
+![On a wide screen, a reworked item with the diff and applied fix on the left and the reply beside it](docs/screenshots/wide-dark.png)
 
 ## Install
 
