@@ -10,6 +10,7 @@ The agent reads every unresolved review thread and PR comment, makes the fixes i
 - Marking a reply to send (or deciding the general comment) shows a button to the next item, or to finishing the review on the last one.
 - A general comment on the PR, alongside the thread replies.
 - `@` autocomplete from the PR's participants, then the repo's mentionable users.
+- `:` emoji autocomplete, like GitHub's: type `:tada` and pick 🎉.
 - Preview rendered by GitHub's own markdown API.
 - GitHub's light and dark themes, following your OS unless you pick one in the header.
 - Edits autosave, and a failed post can be retried without double posting.

@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.6.0
+
+- Type `:` and a couple of letters in a reply to pick an emoji, like on GitHub. It inserts the emoji character.
+
 ## 0.5.0
 
 - Buttons show their keyboard shortcut in a small key box, so you can learn them as you go.

@@ -1,4 +1,6 @@
-import { useEffect, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
+import { gemoji } from 'gemoji';
+import { useEffect, useMemo, useRef, useState, type KeyboardEvent, type RefObject } from 'react';
+import { findEmojiQuery, insertEmoji, rankEmoji, type Emoji, type EmojiQuery } from '../../shared/emoji';
 import { findMentionQuery, insertMention, type MentionQuery } from '../../shared/mentions';
 import type { User } from '../../shared/schema';
 import { api } from '../api';
@@ -54,6 +56,7 @@ export function ReplyEditor({ value, onChange, disabled, textareaRef, onSubmitSh
   const [previewError, setPreviewError] = useState<string | null>(null);
   const [mention, setMention] = useState<MentionQuery | null>(null);
   const [suggestions, setSuggestions] = useState<User[]>([]);
+  const [emoji, setEmoji] = useState<EmojiQuery | null>(null);
   const [active, setActive] = useState(0);
   const [anchor, setAnchor] = useState({ top: 0, left: 0 });
   const lookup = useRef(0);
@@ -94,41 +97,62 @@ export function ReplyEditor({ value, onChange, disabled, textareaRef, onSubmitSh
     return () => window.clearTimeout(timer);
   }, [mention?.query, mention?.start]);
 
-  const refreshMention = (textarea: HTMLTextAreaElement) => {
-    const found = textarea.selectionStart === textarea.selectionEnd ? findMentionQuery(textarea.value, textarea.selectionStart) : null;
-    setMention(found);
-    if (found) setAnchor(caretPosition(textarea, found.start));
+  const emojiMatches = useMemo(() => (emoji ? rankEmoji(emoji.query, gemoji) : []), [emoji?.query]);
+  const optionCount = emoji ? emojiMatches.length : mention ? suggestions.length : 0;
+
+  const closeSuggestions = () => {
+    setMention(null);
+    setEmoji(null);
   };
 
-  const choose = (user: User) => {
+  const refreshMention = (textarea: HTMLTextAreaElement) => {
+    const collapsed = textarea.selectionStart === textarea.selectionEnd;
+    const found = collapsed ? findMentionQuery(textarea.value, textarea.selectionStart) : null;
+    const foundEmoji = collapsed && !found ? findEmojiQuery(textarea.value, textarea.selectionStart) : null;
+    setMention(found);
+    if (foundEmoji?.query !== emoji?.query) setActive(0);
+    setEmoji(foundEmoji);
+    const start = found?.start ?? foundEmoji?.start;
+    if (start !== undefined) setAnchor(caretPosition(textarea, start));
+  };
+
+  const apply = (next: { text: string; caret: number }) => {
     const textarea = textareaRef.current;
-    if (!textarea || !mention) return;
-    const next = insertMention(textarea.value, mention, user.login);
+    if (!textarea) return;
     onChange(next.text);
-    setMention(null);
+    closeSuggestions();
     requestAnimationFrame(() => {
       textarea.focus();
       textarea.setSelectionRange(next.caret, next.caret);
     });
   };
 
+  const choose = (user: User) => {
+    if (textareaRef.current && mention) apply(insertMention(textareaRef.current.value, mention, user.login));
+  };
+
+  const chooseEmoji = (entry: Emoji) => {
+    if (textareaRef.current && emoji) apply(insertEmoji(textareaRef.current.value, emoji, entry.emoji));
+  };
+
   const onKeyDown = (event: KeyboardEvent<HTMLTextAreaElement>) => {
-    if (mention && suggestions.length) {
+    if (optionCount) {
       if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
         event.preventDefault();
         const step = event.key === 'ArrowDown' ? 1 : -1;
-        setActive((index) => (index + step + suggestions.length) % suggestions.length);
+        setActive((index) => (index + step + optionCount) % optionCount);
         return;
       }
       if (event.key === 'Enter' || event.key === 'Tab') {
         event.preventDefault();
-        choose(suggestions[active]!);
+        if (emoji) chooseEmoji(emojiMatches[active]!);
+        else choose(suggestions[active]!);
         return;
       }
       if (event.key === 'Escape') {
         event.preventDefault();
         event.stopPropagation();
-        setMention(null);
+        closeSuggestions();
         return;
       }
     }
@@ -166,7 +190,7 @@ export function ReplyEditor({ value, onChange, disabled, textareaRef, onSubmitSh
               placeholder={placeholder}
               aria-label="Reply"
               aria-autocomplete="list"
-              aria-expanded={Boolean(mention && suggestions.length)}
+              aria-expanded={optionCount > 0}
               onChange={(event) => {
                 onChange(event.target.value);
                 refreshMention(event.target);
@@ -176,7 +200,7 @@ export function ReplyEditor({ value, onChange, disabled, textareaRef, onSubmitSh
               onKeyUp={(event) => {
                 if (['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) refreshMention(event.currentTarget);
               }}
-              onBlur={() => window.setTimeout(() => setMention(null), 150)}
+              onBlur={() => window.setTimeout(closeSuggestions, 150)}
               className="block min-h-32 w-full resize-y rounded-md border border-border bg-canvas-inset px-3 py-2 text-sm leading-5 outline-none focus:border-accent-emphasis focus:bg-canvas focus:ring-1 focus:ring-accent-emphasis disabled:cursor-not-allowed disabled:opacity-70"
             />
             {mention && suggestions.length > 0 && (
@@ -206,6 +230,32 @@ export function ReplyEditor({ value, onChange, disabled, textareaRef, onSubmitSh
                 ))}
               </ul>
             )}
+            {emoji && emojiMatches.length > 0 && (
+              <ul
+                role="listbox"
+                className="absolute z-20 w-64 overflow-hidden rounded-md border border-border bg-overlay py-1 shadow-lg"
+                style={{ top: anchor.top + 12, left: Math.min(anchor.left + 8, 480) }}
+              >
+                {emojiMatches.map((entry, index) => (
+                  <li key={entry.emoji} role="option" aria-selected={index === active}>
+                    <button
+                      type="button"
+                      onMouseDown={(event) => {
+                        event.preventDefault();
+                        chooseEmoji(entry);
+                      }}
+                      onMouseEnter={() => setActive(index)}
+                      className={`flex w-full items-center gap-2 px-3 py-1.5 text-left text-sm ${
+                        index === active ? 'bg-accent-emphasis text-white' : ''
+                      }`}
+                    >
+                      <span className="w-5 text-center text-base leading-5">{entry.emoji}</span>
+                      <span className="truncate">{entry.names[0]}</span>
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
           </>
         ) : (
           <div className="min-h-32 px-2 py-2">
@@ -222,7 +272,7 @@ export function ReplyEditor({ value, onChange, disabled, textareaRef, onSubmitSh
         )}
       </div>
       <p className="px-3 pb-2 text-xs text-fg-muted">
-        Markdown supported. Type <kbd className="font-mono">@</kbd> to mention someone. <kbd className="font-mono">⌘↵</kbd> marks it to send and moves on.
+        Markdown supported. Type <kbd className="font-mono">@</kbd> to mention someone or <kbd className="font-mono">:</kbd> for an emoji. <kbd className="font-mono">⌘↵</kbd> marks it to send and moves on.
       </p>
     </div>
   );
