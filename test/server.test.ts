@@ -79,6 +79,20 @@ describe('review app server', () => {
     expect(results.items.find((item) => item.id === second!.id)).toMatchObject({ action: 'skip', postedUrl: null });
   });
 
+  it('marks only unresolved review threads to resolve', async () => {
+    const { api, sessionDir } = await boot();
+    const { json: session } = await api<SessionPayload>('GET', '/api/session');
+    const thread = session.items.find((item) => item.source.kind === 'thread' && !item.source.thread.isResolved)!;
+    const summary = session.items.find((item) => item.kind === 'summary')!;
+
+    expect((await api('PUT', `/api/items/${summary.id}`, { resolve: true, action: 'send' })).status).toBe(400);
+    await api('PUT', `/api/items/${thread.id}`, { action: 'skip', resolve: true });
+    await api('POST', '/api/finish', { status: 'approved' });
+    const results = readJson<Results>(sessionFiles(sessionDir).results);
+    expect(results.items.find((item) => item.id === thread.id)).toMatchObject({ action: 'skip', resolve: true, resolved: false });
+    expect(results.items.find((item) => item.id === summary.id)).toMatchObject({ resolve: false });
+  });
+
   it('sends items back to the agent only with a note on each', async () => {
     const { api, sessionDir } = await boot();
     const { json: session } = await api<SessionPayload>('GET', '/api/session');

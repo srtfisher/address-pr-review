@@ -2,11 +2,11 @@
 
 An agent skill for working through a pull request's review feedback, where you stay in charge of every word that reaches your colleagues.
 
-The agent reads every unresolved review thread and PR comment, makes the fixes it judges right as local commits, and drafts a reply to each. Then it opens a local app that looks like the PR's "Files changed" tab: each comment on its diff, the fix the agent applied, why it did it, and its draft reply. For each item you send the reply (edited however you like), skip it, or ask the agent to change something. Items you send back get reworked and the app reopens with your other choices kept. When you approve, the agent pushes the fixes and then posts exactly the replies you approved.
+The agent reads every unresolved review thread and PR comment, makes the fixes it judges right as local commits, and drafts a reply to each. Then it opens a local app that looks like the PR's "Files changed" tab: each comment on its diff, the fix the agent applied, why it did it, and its draft reply. For each item you send the reply (edited however you like), skip it, or ask the agent to change something, and you can mark an inline thread to resolve once it's answered. Items you send back get reworked and the app reopens with your other choices kept. When you approve, the agent pushes the fixes and then posts exactly the replies you approved.
 
 ![A review comment with the agent's take, the fix it committed, and its draft reply](docs/screenshots/review-dark.png)
 
-- Keyboard-first for big PRs: `j`/`k` to move, `s` send, `x` skip, `a` ask the agent, `e` edit, `f` review and finish (then `↵` to approve), `⌘↵` send and move on, `?` for the full list.
+- Keyboard-first for big PRs: `j`/`k` to move, `s` send, `x` skip, `r` resolve the thread, `a` ask the agent, `e` edit, `f` review and finish (then `↵` to approve), `⌘↵` send and move on, `?` for the full list.
 - Marking a reply to send (or deciding the general comment) shows a button to the next item, or to finishing the review on the last one.
 - A general comment on the PR, alongside the thread replies.
 - `@` autocomplete from the PR's participants, then the repo's mentionable users.

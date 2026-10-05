@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import type { Action, ItemState, ResultStatus, SessionPayload, SessionState } from '../shared/schema';
+import type { Action, ItemState, ResultStatus, SessionItem, SessionPayload, SessionState } from '../shared/schema';
 import { api } from './api';
 import { Header, type Theme } from './components/Header';
 import { Icon } from './components/icons';
@@ -7,7 +7,7 @@ import { ItemView } from './components/ItemView';
 import { ShortcutsDialog } from './components/ShortcutsDialog';
 import { Sidebar } from './components/Sidebar';
 import { SubmitDialog } from './components/SubmitDialog';
-import { groupItems, statusOf, type ItemStatus } from './model';
+import { groupItems, resolvableThreadId, statusOf, type ItemStatus } from './model';
 
 const THEME_KEY = 'address-pr-review:theme';
 const SAVE_DELAY_MS = 400;
@@ -76,7 +76,7 @@ export function App() {
   const patchLocal = (id: string, patch: Partial<ItemState>) =>
     setState((current) => ({ items: { ...current.items, [id]: { ...current.items[id]!, ...patch } } }));
 
-  const persist = useCallback((id: string, patch: { action?: Action | null; body?: string; instructions?: string }) => {
+  const persist = useCallback((id: string, patch: { action?: Action | null; body?: string; instructions?: string; resolve?: boolean }) => {
     return api
       .updateItem(id, patch)
       .then(() => setSaveError(null))
@@ -116,6 +116,15 @@ export function App() {
     if (action === 'ask') requestAnimationFrame(() => instructionsRef.current?.focus());
   };
 
+  const toggleResolve = (item: SessionItem) => {
+    const itemState = state.items[item.id]!;
+    const threadId = resolvableThreadId(item, itemState);
+    if (!threadId) return;
+    const resolve = itemState.resolveThreadId === null;
+    patchLocal(item.id, { resolveThreadId: resolve ? threadId : null, error: null });
+    void flushSaves().then(() => persist(item.id, { resolve }));
+  };
+
   const visibleIds = useMemo(
     () => ordered.filter((item) => filter === 'all' || statusOf(state.items[item.id]!) === 'undecided' || item.id === selectedId).map((item) => item.id),
     [ordered, filter, state, selectedId],
@@ -148,6 +157,7 @@ export function App() {
       else if (event.key === 's') decideAndAdvance('send');
       else if (event.key === 'x') decideAndAdvance('skip');
       else if (event.key === 'f') setDialogOpen(true);
+      else if (event.key === 'r' && selected) toggleResolve(selected);
       else if (event.key === 'a' && selected && selected.kind !== 'summary' && selected.source.kind !== 'missing') setAction(selected.id, 'ask');
       else if (event.key === 'e') {
         event.preventDefault();
@@ -252,6 +262,7 @@ export function App() {
               onInstructions={(instructions) => setInstructions(selected.id, instructions)}
               onAction={(action) => setAction(selected.id, action)}
               onSendAndNext={() => decideAndAdvance('send')}
+              onResolve={resolvableThreadId(selected, state.items[selected.id]!) ? () => toggleResolve(selected) : null}
               onNext={visibleIds.indexOf(selected.id) < visibleIds.length - 1 ? () => move(1) : null}
               onReview={() => setDialogOpen(true)}
             />

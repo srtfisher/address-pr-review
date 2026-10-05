@@ -9,6 +9,7 @@ const groups: { title: string; shortcuts: { keys: string[]; label: string }[] }[
       { keys: ['k'], label: 'Previous item' },
       { keys: ['s'], label: 'Send the reply and move on' },
       { keys: ['x'], label: "Don't reply and move on" },
+      { keys: ['r'], label: 'Resolve the thread when posting' },
       { keys: ['a'], label: 'Ask the agent to change it' },
       { keys: ['e'], label: 'Edit the reply' },
       { keys: ['f'], label: 'Review and finish' },

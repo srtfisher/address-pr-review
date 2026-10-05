@@ -17,7 +17,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 
 export const api = {
   session: () => request<SessionPayload>('GET', '/api/session'),
-  updateItem: (id: string, patch: { action?: Action | null; body?: string; instructions?: string }) =>
+  updateItem: (id: string, patch: { action?: Action | null; body?: string; instructions?: string; resolve?: boolean }) =>
     request<ItemState>('PUT', `/api/items/${encodeURIComponent(id)}`, patch),
   mentions: (query: string) => request<User[]>('GET', `/api/mentions?q=${encodeURIComponent(query)}`),
   preview: (text: string) => request<{ html: string }>('POST', '/api/preview', { text }),

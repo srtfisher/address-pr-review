@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- Mark an inline review thread to resolve with the new "Resolve thread" button or `r`. When you approve, the agent posts your reply (if any) and then resolves the thread on GitHub. It works with "Don't reply" too, to resolve a thread without saying anything.
+
 ## 0.7.0
 
 - On very wide screens (1760px and up), an item with a diff shows your reply in a column beside the code instead of below it.

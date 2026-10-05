@@ -6,12 +6,14 @@ import { parseDrafts, readJson, readSavedState, sessionFiles, writeJson } from '
 export interface PostOutcome {
   id: string;
   postedUrl: string | null;
+  resolved: boolean;
   error: string | null;
 }
 
 /**
  * Posts the replies the human approved, exactly as saved by the app. Safe to
- * run again after a failure: replies that already posted are skipped.
+ * run again after a failure: replies that already posted and threads already
+ * resolved are skipped.
  */
 export async function postApproved(sessionDir: string, github: GitHub): Promise<PostOutcome[]> {
   const files = sessionFiles(sessionDir);
@@ -32,19 +34,27 @@ export async function postApproved(sessionDir: string, github: GitHub): Promise<
 
   for (const { id, thread, commentId } of queue) {
     const itemState = state.items[id];
-    if (!itemState || itemState.action !== 'send') continue;
-    if (!itemState.postedUrl) {
-      try {
+    if (!itemState || itemState.action === 'ask') continue;
+    const reply = itemState.action === 'send';
+    const threadId = itemState.resolveThreadId;
+    if (!reply && !threadId) continue;
+    try {
+      if (reply && !itemState.postedUrl) {
         itemState.postedUrl = thread
           ? await github.replyToThread(drafts.pr, commentId!, itemState.body)
           : await github.createComment(drafts.pr, itemState.body);
-        itemState.error = null;
-      } catch (error) {
-        itemState.error = error instanceof Error ? error.message : String(error);
+        writeJson(files.state, state);
       }
-      writeJson(files.state, state);
+      if (threadId && !itemState.resolved) {
+        await github.resolveThread(threadId);
+        itemState.resolved = true;
+      }
+      itemState.error = null;
+    } catch (error) {
+      itemState.error = error instanceof Error ? error.message : String(error);
     }
-    outcomes.push({ id, postedUrl: itemState.postedUrl, error: itemState.error });
+    writeJson(files.state, state);
+    outcomes.push({ id, postedUrl: itemState.postedUrl, resolved: itemState.resolved, error: itemState.error });
   }
 
   writeJson(files.results, {
@@ -52,6 +62,7 @@ export async function postApproved(sessionDir: string, github: GitHub): Promise<
     items: results.items.map((item) => ({
       ...item,
       postedUrl: state.items[item.id]?.postedUrl ?? item.postedUrl,
+      resolved: state.items[item.id]?.resolved ?? item.resolved,
       error: state.items[item.id]?.error ?? null,
     })),
   } satisfies Results);

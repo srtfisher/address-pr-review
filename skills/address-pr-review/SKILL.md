@@ -7,7 +7,7 @@ description: Use whenever a pull request has received code review feedback that 
 
 Work through a pull request's review feedback in rounds with the human. You decide what to fix and make the fixes locally. The human reviews your fixes and drafts in a local app, where they approve replies or send items back to you with a note. When they approve, you push the fixes, then post exactly the replies they approved.
 
-**The replies are the human's.** You draft them, but only text the human approved in the app is posted, and `APP post` posts it from the app's saved state, byte for byte. Never write to a reviewer any other way, never edit approved text, and never resolve threads.
+**The replies are the human's.** You draft them, but only text the human approved in the app is posted, and `APP post` posts it from the app's saved state, byte for byte. Never write to a reviewer any other way, never edit approved text, and never resolve threads yourself; `APP post` resolves only the ones the human marked to resolve.
 
 The app lives next to this file. Below, `APP` means `node <this skill's directory>/app/cli.mjs`. Run it from the repository root. It needs Node 20+ and an authenticated `gh`; if either is missing, stop and say so.
 
@@ -60,10 +60,10 @@ The app lives next to this file. Below, `APP` means `node <this skill's director
 7. **Wait for the round to end.** Run `APP wait <session>`. It blocks for up to nine minutes; exit code 3 means the human is still working, so run it again until it exits 0 with the results JSON. Then act on `status`:
 
    - **`revise`**: items with `action: "ask"` carry the human's `instructions`. For each one, do what they asked: change or revert the code, run the tests, and commit locally (add new commits rather than rewriting ones the human already reviewed), then update that item's `draft`, `rationale`, and `commits` in the drafts file. Don't touch other items; their state is the human's. Reopen with `APP open <drafts.json> --session <session>`, which keeps every approved or skipped reply whose draft you didn't change, and wait again.
-   - **`approved`**: push the fixes to the PR's branch. Never force-push. If the push fails or the branch has moved on, stop and tell the human; post nothing. Once the push succeeds, run `APP post <session>`. It posts the replies marked to send, in order, exactly as saved, and prints each one's URL or error. If some failed, run it again; replies that already posted are skipped. If the PR is part of a stack, say that the branches above it need a rebase; don't do it yourself.
+   - **`approved`**: push the fixes to the PR's branch. Never force-push. If the push fails or the branch has moved on, stop and tell the human; post nothing. Once the push succeeds, run `APP post <session>`. It posts the replies marked to send, in order, exactly as saved, then resolves any thread the human marked to resolve (`resolve: true`), and prints each one's URL, whether it resolved, or its error. If some failed, run it again; replies that already posted and threads already resolved are skipped. If the PR is part of a stack, say that the branches above it need a rebase; don't do it yourself.
    - **`canceled`**: push nothing and post nothing. Leave the local commits in place and say so.
 
-8. **Report back:** what you changed and pushed, which replies were posted (with their links), which were skipped, anything that failed to post, and open questions.
+8. **Report back:** what you changed and pushed, which replies were posted (with their links), which threads were resolved, which were skipped, anything that failed to post, and open questions.
 
 ## Notes
 

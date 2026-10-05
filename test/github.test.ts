@@ -29,6 +29,13 @@ describe('GhGitHub posting', () => {
     expect(calls[0]!.args[3]).toBe('repos/acme/storefront/issues/482/comments');
     expect(JSON.parse(calls[0]!.input!).body).toBe(body);
   });
+
+  it('resolves a review thread by its node id', async () => {
+    const { calls, gh } = recorder(JSON.stringify({ data: { resolveReviewThread: { thread: { id: 'PRRT_1' } } } }));
+    await new GhGitHub(gh).resolveThread('PRRT_1');
+    expect(calls[0]!.args.find((arg) => arg.startsWith('query='))).toContain('resolveReviewThread');
+    expect(calls[0]!.args).toContain('threadId=PRRT_1');
+  });
 });
 
 describe('GhGitHub reads', () => {

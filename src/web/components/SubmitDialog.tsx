@@ -39,6 +39,10 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
   const asking = byStatus('ask');
   const undecided = byStatus('undecided');
   const skipped = byStatus('skip');
+  const resolving = items.filter((item) => {
+    const itemState = state.items[item.id]!;
+    return itemState.resolveThreadId !== null && !itemState.resolved && itemState.action !== 'ask';
+  });
   const missingNotes = asking.filter((item) => state.items[item.id]!.instructions.trim() === '');
   const revising = asking.length > 0;
 
@@ -92,10 +96,11 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
         <p className="px-4 pt-3 text-sm text-fg-muted">
           {revising
             ? `The agent reworks ${asking.length} ${asking.length === 1 ? 'item' : 'items'} and reopens this page. Your ${toSend.length} approved ${toSend.length === 1 ? 'reply is' : 'replies are'} kept for the next round, and nothing is posted yet.`
-            : 'The agent pushes its fixes first, then posts these exactly as written.'}
+            : `The agent pushes its fixes first, then posts these exactly as written${resolving.length ? ' and resolves the threads you marked' : ''}.`}
         </p>
         <p className="px-4 pt-1 text-sm text-fg-muted">
           {toSend.length} to send · {skipped.length} skipped
+          {resolving.length > 0 && ` · ${resolving.length} to resolve`}
           {revising && ` · ${asking.length} for the agent`}
           {undecided.length > 0 && <span className="text-attention"> · {undecided.length} undecided, which won't be posted</span>}
         </p>
@@ -108,7 +113,7 @@ export function SubmitDialog({ open, items, state, onClose, onFinish, onSelect }
             {toSend.map((item) => row(item, firstLine(state.items[item.id]!.body), 'send'))}
           </ul>
         ) : (
-          <p className="px-4 py-4 text-sm">Nothing is marked to send. The agent will push its fixes and post no replies.</p>
+          <p className="px-4 py-4 text-sm">Nothing is marked to send. The agent will push its fixes and post no replies{resolving.length > 0 && `, then resolve ${resolving.length} ${resolving.length === 1 ? 'thread' : 'threads'}`}.</p>
         )}
         {error && <p className="mx-4 my-3 rounded-md border border-danger/40 bg-danger-subtle px-3 py-2 text-sm text-danger">{error}</p>}
       </div>

@@ -8,6 +8,11 @@ export function statusOf(state: ItemState): ItemStatus {
   return state.action ?? 'undecided';
 }
 
+export function resolvableThreadId(item: SessionItem, state: ItemState): string | null {
+  if (item.source.kind !== 'thread' || item.source.thread.isResolved || state.postedUrl || state.action === 'ask') return null;
+  return item.source.thread.id;
+}
+
 export interface Group {
   key: string;
   label: string;

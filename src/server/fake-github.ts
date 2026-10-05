@@ -39,6 +39,7 @@ export function loadFixture(dir: string): FixtureData {
 /** Serves a fixture instead of GitHub and records what would have been posted. */
 export class FakeGitHub implements GitHub {
   readonly posts: FakePost[] = [];
+  readonly resolved: string[] = [];
   private readonly failing: Set<number>;
 
   constructor(private readonly data: FixtureData) {
@@ -81,6 +82,10 @@ export class FakeGitHub implements GitHub {
   async createComment(_ref: PrRef, body: string): Promise<string> {
     this.posts.push({ kind: 'comment', commentId: null, body });
     return `${this.data.pr.url}#issuecomment-${900000 + this.posts.length}`;
+  }
+
+  async resolveThread(threadId: string): Promise<void> {
+    this.resolved.push(threadId);
   }
 
   private maybeFail(commentId: number): void {

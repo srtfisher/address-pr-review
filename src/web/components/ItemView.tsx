@@ -237,17 +237,19 @@ interface Props {
   onInstructions: (instructions: string) => void;
   onAction: (action: Action | null) => void;
   onSendAndNext: () => void;
+  onResolve: (() => void) | null;
   onNext: (() => void) | null;
   onReview: () => void;
 }
 
-export function ItemView({ item, state, textareaRef, instructionsRef, onBody, onInstructions, onAction, onSendAndNext, onNext, onReview }: Props) {
+export function ItemView({ item, state, textareaRef, instructionsRef, onBody, onInstructions, onAction, onSendAndNext, onResolve, onNext, onReview }: Props) {
   const status = statusOf(state);
   const posted = status === 'posted';
   const missing = item.source.kind === 'missing';
   const isComment = item.kind === 'summary';
   const target = item.kind === 'thread' ? 'Replies in this thread' : 'Posts as a new comment on the pull request';
   const focusPath = item.source.kind === 'thread' ? item.source.thread.path : null;
+  const resolving = state.resolveThreadId !== null;
   const split = item.source.kind === 'thread' || item.commits.length > 0;
 
   const choice = (action: Action, key: string, icon: 'skip' | 'sparkle' | 'check', idle: string, active: string, activeClass: string, disabled = false) => (
@@ -317,11 +319,17 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
             <div className="space-y-2">
               <div className="flex items-center gap-2 rounded-md border border-done/40 bg-done-subtle px-4 py-2 text-sm text-done">
                 <Icon name="checkCircle" />
-                Posted.
+                {state.resolved ? 'Posted and resolved.' : 'Posted.'}
                 <a href={state.postedUrl!} target="_blank" rel="noreferrer" className="font-medium underline">
                   View on GitHub
                 </a>
               </div>
+              {state.error && (
+                <div className="flex items-center gap-2 rounded-md border border-danger/40 bg-danger-subtle px-4 py-2 text-sm text-danger">
+                  <Icon name="alert" className="shrink-0" />
+                  <span>Resolving the thread failed: {state.error}</span>
+                </div>
+              )}
               <div className="rounded-md border border-border px-4 py-3">
                 <pre className="font-sans text-sm whitespace-pre-wrap">{state.body}</pre>
               </div>
@@ -359,7 +367,7 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
                 </div>
               )}
               <div className="flex flex-wrap items-center justify-end gap-2">
-                <span className={`mr-auto text-xs text-fg-muted ${split ? '3xl:basis-full' : ''}`}>
+                <span className={`mr-auto text-xs text-fg-muted ${onResolve ? 'basis-full' : split ? '3xl:basis-full' : ''}`}>
                   <kbd className="font-mono">e</kbd> edit · <kbd className="font-mono">j</kbd>/<kbd className="font-mono">k</kbd> next/previous · <kbd className="font-mono">?</kbd> all shortcuts
                 </span>
                 {state.action === 'ask' ? (
@@ -385,6 +393,21 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
                 ) : (
                   <>
                     {choice('skip', 'x', 'skip', "Don't reply", "Won't reply", 'border-fg-muted bg-neutral-muted text-fg')}
+                    {onResolve && (
+                      <button
+                        type="button"
+                        aria-pressed={resolving}
+                        aria-keyshortcuts="r"
+                        onClick={onResolve}
+                        className={`inline-flex items-center gap-1.5 rounded-md border px-3 py-1.5 text-sm font-medium ${
+                          resolving ? 'border-done bg-done-subtle text-done' : 'border-border bg-btn text-fg hover:bg-btn-hover'
+                        }`}
+                      >
+                        <Icon name="check" size={14} />
+                        {resolving ? 'Will resolve' : 'Resolve thread'}
+                        <Kbd>r</Kbd>
+                      </button>
+                    )}
                     {!isComment && choice('ask', 'a', 'sparkle', 'Ask agent to change', 'Back to the agent', 'border-done bg-done-subtle text-done', missing)}
                     {choice(
                       'send',
@@ -407,9 +430,17 @@ export function ItemView({ item, state, textareaRef, instructionsRef, onBody, on
                 >
                   <Icon name={state.action === 'send' ? 'checkCircle' : 'skip'} className={`shrink-0 ${state.action === 'send' ? 'text-success' : 'text-fg-muted'}`} />
                   <span className="mr-auto">
-                    {state.action === 'send' ? 'Marked to send.' : isComment ? 'No comment will be posted.' : 'No reply will be posted.'}
+                    {state.action === 'send'
+                      ? resolving
+                        ? 'Marked to send, then resolve the thread.'
+                        : 'Marked to send.'
+                      : isComment
+                        ? 'No comment will be posted.'
+                        : resolving
+                          ? 'No reply will be posted, but the thread will be resolved.'
+                          : 'No reply will be posted.'}
                     {!onNext && ' That was the last one.'}
-                    {state.action === 'send' && ' Nothing posts until you finish the review.'}
+                    {(state.action === 'send' || resolving) && ' Nothing posts until you finish the review.'}
                   </span>
                   <button
                     type="button"

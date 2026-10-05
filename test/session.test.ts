@@ -58,6 +58,8 @@ describe('buildItems', () => {
       basedOn: items[0]!.draft,
       lastAsk: null,
       postedUrl: null,
+      resolveThreadId: null,
+      resolved: false,
       error: null,
     });
     const saved = initialState(items);

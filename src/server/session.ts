@@ -105,6 +105,8 @@ export function initialState(items: SessionItem[], saved?: SessionState): Sessio
       basedOn: item.draft,
       lastAsk: previous?.action === 'ask' ? previous.instructions : null,
       postedUrl: null,
+      resolveThreadId: null,
+      resolved: false,
       error: null,
     };
   }
@@ -125,6 +127,8 @@ export function buildResults(status: ResultStatus, drafts: Drafts, items: Sessio
         body: itemState.body,
         instructions: itemState.instructions,
         postedUrl: itemState.postedUrl,
+        resolve: itemState.resolveThreadId !== null,
+        resolved: itemState.resolved,
         error: itemState.error,
       };
     }),

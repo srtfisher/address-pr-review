@@ -127,7 +127,9 @@ export async function startServer(options: ServerOptions): Promise<RunningServer
       const item = itemById(decodeURIComponent(itemMatch[1]!));
       const itemState = state.items[item.id]!;
       if (itemState.postedUrl) throw new HttpError(409, 'this reply has already been posted');
-      const body = (await readBody(request)) as { action?: unknown; body?: unknown; instructions?: unknown };
+      const body = (await readBody(request)) as { action?: unknown; body?: unknown; instructions?: unknown; resolve?: unknown };
+      const thread = item.source.kind === 'thread' && !item.source.thread.isResolved ? item.source.thread : null;
+      if (body.resolve === true && !thread) throw new HttpError(400, 'only an unresolved review thread can be resolved');
       if (body.action !== undefined) {
         const action = body.action === null ? { success: true as const, data: null } : Action.safeParse(body.action);
         if (!action.success) throw new HttpError(400, 'action must be "send", "skip", "ask", or null');
@@ -135,6 +137,7 @@ export async function startServer(options: ServerOptions): Promise<RunningServer
       }
       if (typeof body.body === 'string') itemState.body = body.body;
       if (typeof body.instructions === 'string') itemState.instructions = body.instructions;
+      if (typeof body.resolve === 'boolean') itemState.resolveThreadId = body.resolve ? thread!.id : null;
       itemState.error = null;
       save();
       return send(response, 200, itemState);

@@ -24,7 +24,7 @@ function approvedSession(status: Results['status'] = 'approved') {
   writeJson(files.drafts, drafts);
   writeJson(files.state, state);
   writeJson(files.results, buildResults(status, drafts, items, state));
-  return { dir, github: new FakeGitHub(fixture), first: first!, failing: failing!, summaryDraft: drafts.summary!.draft };
+  return { dir, state, github: new FakeGitHub(fixture), first: first!, second: second!, failing: failing!, summaryDraft: drafts.summary!.draft };
 }
 
 describe('postApproved', () => {
@@ -42,6 +42,25 @@ describe('postApproved', () => {
       { kind: 'comment', commentId: null, body: summaryDraft },
     ]);
     expect(outcomes.filter((outcome) => outcome.error)).toHaveLength(1);
+  });
+
+  it('resolves the threads the human marked, after any reply and only once', async () => {
+    const { dir, state, github, first, second, failing } = approvedSession();
+    const threadOf = (commentId: number | null) => {
+      const thread = loadFixture(fixtureDir).pr.threads.find((t) => t.comments.some((c) => c.id === commentId));
+      return thread!.id;
+    };
+    state.items[first.id] = { ...state.items[first.id]!, resolveThreadId: threadOf(first.commentId) };
+    state.items[second.id] = { ...state.items[second.id]!, resolveThreadId: threadOf(second.commentId) };
+    state.items[failing.id] = { ...state.items[failing.id]!, resolveThreadId: threadOf(failing.commentId) };
+    writeJson(sessionFiles(dir).state, state);
+
+    await postApproved(dir, github);
+    expect(github.resolved).toEqual([threadOf(first.commentId), threadOf(second.commentId)]);
+    await postApproved(dir, github);
+    expect(github.resolved).toEqual([threadOf(first.commentId), threadOf(second.commentId), threadOf(failing.commentId)]);
+    const results = readJson<Results>(sessionFiles(dir).results);
+    expect(results.items.find((item) => item.id === second.id)).toMatchObject({ action: 'skip', postedUrl: null, resolved: true });
   });
 
   it('retries only what failed when run again', async () => {

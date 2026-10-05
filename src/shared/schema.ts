@@ -57,6 +57,9 @@ export const ItemState = z.object({
   /** The instructions from the round before, shown so the human can check the rework. */
   lastAsk: z.string().nullable().default(null),
   postedUrl: z.string().nullable(),
+  /** The review thread to resolve when posting, set when the human chose to resolve it. */
+  resolveThreadId: z.string().nullable().default(null),
+  resolved: z.boolean().default(false),
   error: z.string().nullable(),
 });
 export type ItemState = z.infer<typeof ItemState>;
@@ -77,6 +80,8 @@ export interface ResultItem {
   body: string;
   instructions: string;
   postedUrl: string | null;
+  resolve: boolean;
+  resolved: boolean;
   error: string | null;
 }
 

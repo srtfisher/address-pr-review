@@ -11,6 +11,7 @@ export interface GitHub {
   renderMarkdown(ref: PrRef, text: string): Promise<string>;
   replyToThread(ref: PrRef, commentId: number, body: string): Promise<string>;
   createComment(ref: PrRef, body: string): Promise<string>;
+  resolveThread(threadId: string): Promise<void>;
 }
 
 export class GhError extends Error {}
@@ -282,6 +283,10 @@ export class GhGitHub implements GitHub {
 
   async createComment(ref: PrRef, body: string): Promise<string> {
     return this.post(`repos/${ref.owner}/${ref.repo}/issues/${ref.number}/comments`, body);
+  }
+
+  async resolveThread(threadId: string): Promise<void> {
+    await this.graphql('mutation($threadId: ID!) { resolveReviewThread(input: { threadId: $threadId }) { thread { id } } }', { threadId });
   }
 
   private async post(path: string, body: string): Promise<string> {
