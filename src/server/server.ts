@@ -117,6 +117,8 @@ export async function startServer(options: ServerOptions): Promise<RunningServer
     if (!authorized(request)) throw new HttpError(401, 'missing or wrong session token');
     const route = `${request.method} ${url.pathname}`;
 
+    if (route === 'GET /api/ping') return send(response, 200, { ok: true });
+
     if (route === 'GET /api/session') {
       const payload: SessionPayload = { pr, items, state, fixture: options.fixture };
       return send(response, 200, payload);

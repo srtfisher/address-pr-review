@@ -48,6 +48,12 @@ describe('review app server', () => {
     expect((await fetch(`${base}/api/session`)).status).toBe(401);
   });
 
+  it('answers a ping so the page can tell the app is still running', async () => {
+    const { api, base } = await boot();
+    expect((await api('GET', '/api/ping')).status).toBe(200);
+    expect((await fetch(`${base}/api/ping`)).status).toBe(401);
+  });
+
   it('answers a missing static file with a 404 and keeps running', async () => {
     const { base } = await boot();
     expect((await fetch(`${base}/favicon.ico`)).status).toBe(404);

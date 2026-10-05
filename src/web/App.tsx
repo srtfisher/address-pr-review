@@ -11,6 +11,7 @@ import { groupItems, resolvableThreadId, statusOf, type ItemStatus } from './mod
 
 const THEME_KEY = 'address-pr-review:theme';
 const SAVE_DELAY_MS = 400;
+const PING_INTERVAL_MS = 5000;
 
 function readTheme(): Theme {
   try {
@@ -43,6 +44,7 @@ export function App() {
   const [shortcutsOpen, setShortcutsOpen] = useState(false);
   const [finished, setFinished] = useState<ResultStatus | null>(null);
   const [saveError, setSaveError] = useState<string | null>(null);
+  const [disconnected, setDisconnected] = useState(false);
   const textareaRef = useRef<HTMLTextAreaElement | null>(null);
   const instructionsRef = useRef<HTMLTextAreaElement | null>(null);
   const mainRef = useRef<HTMLElement | null>(null);
@@ -62,6 +64,21 @@ export function App() {
       })
       .catch((error: Error) => setLoadError(error.message));
   }, []);
+
+  useEffect(() => {
+    if (!session || finished) return;
+    const check = () =>
+      api.ping().then(
+        () => setDisconnected(false),
+        () => setDisconnected(true),
+      );
+    const timer = window.setInterval(check, PING_INTERVAL_MS);
+    window.addEventListener('focus', check);
+    return () => {
+      window.clearInterval(timer);
+      window.removeEventListener('focus', check);
+    };
+  }, [session, finished]);
 
   const groups = useMemo(() => (session ? groupItems(session.items) : []), [session]);
   const ordered = useMemo(() => groups.flatMap((group) => group.items), [groups]);
@@ -150,7 +167,7 @@ export function App() {
 
   useEffect(() => {
     const onKey = (event: KeyboardEvent) => {
-      if (dialogOpen || shortcutsOpen || finished || event.metaKey || event.ctrlKey || event.altKey || isTyping(event.target)) return;
+      if (dialogOpen || shortcutsOpen || finished || disconnected || event.metaKey || event.ctrlKey || event.altKey || isTyping(event.target)) return;
       if (event.key === '?') setShortcutsOpen(true);
       else if (event.key === 'j') move(1);
       else if (event.key === 'k') move(-1);
@@ -198,7 +215,7 @@ export function App() {
     return <div className="flex h-full items-center justify-center text-fg-muted">Loading the pull request…</div>;
   }
 
-  if (finished) {
+  if (finished || disconnected) {
     const ending = {
       approved: {
         icon: 'checkCircle' as const,
@@ -213,7 +230,13 @@ export function App() {
         text: 'It will rework what you asked for and open a new page with your other choices kept. You can close this tab.',
       },
       canceled: { icon: 'skip' as const, tone: 'text-fg-muted', title: 'Session ended', text: 'Nothing was pushed or posted. You can close this tab.' },
-    }[finished];
+      disconnected: {
+        icon: 'skip' as const,
+        tone: 'text-fg-muted',
+        title: 'Session disconnected',
+        text: 'The review app for this tab stopped, so changes here can no longer be saved. If your agent opened a new page, use that one. You can close this tab.',
+      },
+    }[finished ?? 'disconnected'];
     return (
       <div className="flex h-full items-center justify-center p-6">
         <div className="max-w-md text-center">

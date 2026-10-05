@@ -16,6 +16,7 @@ async function request<T>(method: string, path: string, body?: unknown): Promise
 }
 
 export const api = {
+  ping: () => request<{ ok: true }>('GET', '/api/ping'),
   session: () => request<SessionPayload>('GET', '/api/session'),
   updateItem: (id: string, patch: { action?: Action | null; body?: string; instructions?: string; resolve?: boolean }) =>
     request<ItemState>('PUT', `/api/items/${encodeURIComponent(id)}`, patch),

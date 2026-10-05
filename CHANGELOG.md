@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- If the review app stops while its tab is still open (for example, because your agent opened a new page for the next round), the tab now says the session is disconnected instead of silently failing to save.
+
 ## 0.8.0
 
 - Mark an inline review thread to resolve with the new "Resolve thread" button or `r`. When you approve, the agent posts your reply (if any) and then resolves the thread on GitHub. It works with "Don't reply" too, to resolve a thread without saying anything.
