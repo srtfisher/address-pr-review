@@ -32,7 +32,7 @@ describe('GhGitHub posting', () => {
 
   it('resolves a review thread by its node id', async () => {
     const { calls, gh } = recorder(JSON.stringify({ data: { resolveReviewThread: { thread: { id: 'PRRT_1' } } } }));
-    await new GhGitHub(gh).resolveThread('PRRT_1');
+    await new GhGitHub(gh).resolveThread(ref, 'PRRT_1');
     expect(calls[0]!.args.find((arg) => arg.startsWith('query='))).toContain('resolveReviewThread');
     expect(calls[0]!.args).toContain('threadId=PRRT_1');
   });
