@@ -84,7 +84,7 @@ export class FakeGitHub implements GitHub {
     return `${this.data.pr.url}#issuecomment-${900000 + this.posts.length}`;
   }
 
-  async resolveThread(threadId: string): Promise<void> {
+  async resolveThread(_ref: PrRef, threadId: string): Promise<void> {
     this.resolved.push(threadId);
   }
 

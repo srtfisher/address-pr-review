@@ -1,13 +1,14 @@
-import { spawn } from 'node:child_process';
+import { execFileSync, spawn } from 'node:child_process';
 import { randomBytes } from 'node:crypto';
 import { existsSync, openSync, readFileSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { parseArgs } from 'node:util';
-import type { Drafts, PullRequest, Results } from '../shared/schema';
+import type { Drafts, PrRef, PullRequest, Results } from '../shared/schema';
 import { FakeGit, FakeGitHub, loadFixture } from './fake-github';
 import { GhGitHub, type GitHub } from './github';
+import { GlabGitLab } from './gitlab';
 import { CliGit } from './local-git';
 import { postApproved } from './post';
 import { startServer } from './server';
@@ -32,14 +33,28 @@ function fail(message: string): never {
   process.exit(1);
 }
 
-function githubFor(fixture: string | undefined): GitHub {
-  return fixture ? new FakeGitHub(loadFixture(resolve(fixture))) : new GhGitHub();
+type Provider = NonNullable<PrRef['provider']>;
+
+function githubFor(fixture: string | undefined, provider: Provider | undefined): GitHub {
+  if (fixture) return new FakeGitHub(loadFixture(resolve(fixture)));
+  return provider === 'gitlab' ? new GlabGitLab() : new GhGitHub();
+}
+
+/** GitLab when the --pr value is a merge request URL, or when there is none and the origin remote points at GitLab. */
+function detectProvider(pr: string | undefined): Provider {
+  if (pr) return /\/-\/merge_requests\/\d+/.test(pr) ? 'gitlab' : 'github';
+  try {
+    const remote = execFileSync('git', ['remote', 'get-url', 'origin'], { encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] });
+    return /gitlab/i.test(remote) ? 'gitlab' : 'github';
+  } catch {
+    return 'github';
+  }
 }
 
 function feedbackSummary(pr: PullRequest) {
   const person = (user: { login: string } | null) => user?.login ?? 'ghost';
   return {
-    pr: { owner: pr.owner, repo: pr.repo, number: pr.number, title: pr.title, url: pr.url, author: person(pr.author) },
+    pr: { owner: pr.owner, repo: pr.repo, number: pr.number, ...(pr.provider ? { provider: pr.provider } : {}), title: pr.title, url: pr.url, author: person(pr.author) },
     threads: pr.threads
       .filter((thread) => !thread.isResolved)
       .map((thread) => ({
@@ -103,7 +118,7 @@ const isRunning = (pid: number): boolean => {
 const logTail = (path: string): string => (existsSync(path) ? readFileSync(path, 'utf8').trim().split('\n').slice(-20).join('\n') : '');
 
 async function commandFeedback(values: { pr?: string; fixture?: string }): Promise<void> {
-  const github = githubFor(values.fixture);
+  const github = githubFor(values.fixture, detectProvider(values.pr));
   await github.checkAuth();
   const ref = await github.resolvePr(values.pr);
   const pr = await github.loadPullRequest(ref);
@@ -116,13 +131,13 @@ async function commandOpen(
 ): Promise<void> {
   if (!draftsPath) fail(USAGE);
   const drafts = parseDrafts(readJson(resolve(draftsPath)));
-  const github = githubFor(values.fixture);
+  const github = githubFor(values.fixture, drafts.pr.provider);
   await github.checkAuth();
 
   const { owner, repo, number } = drafts.pr;
   const session = values.session
     ? resolve(values.session)
-    : join(tmpdir(), 'address-pr-review', `${owner}-${repo}-${number}-${randomBytes(4).toString('hex')}`);
+    : join(tmpdir(), 'address-pr-review', `${owner.replaceAll('/', '-')}-${repo}-${number}-${randomBytes(4).toString('hex')}`);
   const files = sessionFiles(session);
   if (values.session) {
     if (!existsSync(files.drafts)) fail(`${session} is not a review session.`);
@@ -167,7 +182,7 @@ async function commandServe(session: string | undefined, values: { fixture?: str
     sessionDir: session,
     drafts,
     git,
-    github: githubFor(values.fixture),
+    github: githubFor(values.fixture, drafts.pr.provider),
     webDir: join(here, 'web'),
     fixture: Boolean(values.fixture),
     onFinish: () => {
@@ -198,7 +213,7 @@ async function commandWait(session: string | undefined, values: { timeout?: stri
 
 async function commandPost(session: string | undefined, values: { fixture?: string }): Promise<void> {
   if (!session) fail(USAGE);
-  const outcomes = await postApproved(resolve(session), githubFor(values.fixture));
+  const outcomes = await postApproved(resolve(session), githubFor(values.fixture, parseDrafts(readJson(sessionFiles(resolve(session)).drafts)).pr.provider));
   process.stdout.write(`${JSON.stringify(outcomes, null, 2)}\n`);
   if (outcomes.some((outcome) => outcome.error)) process.exit(1);
 }

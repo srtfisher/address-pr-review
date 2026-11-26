@@ -46,7 +46,7 @@ export async function postApproved(sessionDir: string, github: GitHub): Promise<
         writeJson(files.state, state);
       }
       if (threadId && !itemState.resolved) {
-        await github.resolveThread(threadId);
+        await github.resolveThread(drafts.pr, threadId);
         itemState.resolved = true;
       }
       itemState.error = null;

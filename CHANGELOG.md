@@ -1,5 +1,9 @@
 # Changelog
 
+## Unreleased
+
+- GitLab merge requests work too, through the [GitLab CLI](https://gitlab.com/gitlab-org/cli) (`glab`). Pass a merge request URL to `feedback --pr`, or run it on a branch whose `origin` remote is on GitLab. Resolvable discussions show up as threads, with their diff context, and posting replies in the discussion and resolving it work as on GitHub.
+
 ## 0.9.0
 
 - If the review app stops while its tab is still open (for example, because your agent opened a new page for the next round), the tab now says the session is disconnected instead of silently failing to save.
