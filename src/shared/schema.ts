@@ -6,6 +6,8 @@ export const PrRef = z.object({
   owner: z.string().min(1),
   repo: z.string().min(1),
   number: z.number().int().positive(),
+  // Absent means GitHub, so drafts files written before GitLab support still work.
+  provider: z.enum(['github', 'gitlab']).optional(),
 });
 export type PrRef = z.infer<typeof PrRef>;
 
