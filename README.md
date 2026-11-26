@@ -24,7 +24,7 @@ The agent reads every unresolved review thread and PR comment, makes the fixes i
 npx skills add srtfisher/address-pr-review
 ```
 
-That installs the skill into `~/.agents/skills/` and links it for the agents you pick (Claude Code, Codex, Cursor, and others). The app ships prebuilt inside the skill, so there's nothing to compile. You need Node 20+ and the [GitHub CLI](https://cli.github.com/) logged in.
+That installs the skill into `~/.agents/skills/` and links it for the agents you pick (Claude Code, Codex, Cursor, and others). The app ships prebuilt inside the skill, so there's nothing to compile. You need Node 20+ and the [GitHub CLI](https://cli.github.com/) logged in, or for GitLab merge requests the [GitLab CLI](https://gitlab.com/gitlab-org/cli) (`glab`).
 
 Then, on a branch with an open PR, ask your agent to use `/address-pr-review`, or just ask in plain words:
 
@@ -61,6 +61,10 @@ The skill drives a small CLI at `skills/address-pr-review/app/cli.mjs`. It's als
 - `post <session>` posts the replies you approved, byte for byte from the app's saved state. The agent runs it only after pushing the fixes.
 
 Inline threads get in-thread replies. Top-level comments, review bodies, and the general comment post as new PR comments, since GitHub can't thread those.
+
+### GitLab
+
+The same flow works for GitLab merge requests through `glab`. `feedback` picks GitLab when `--pr` is a merge request URL (`https://gitlab.com/group/sub/project/-/merge_requests/12`), or when there's no `--pr` and the `origin` remote is on GitLab. The PR in the output carries `"provider": "gitlab"`; keep it in the drafts file so `open` and `post` use GitLab too. Resolvable discussions are threads (replies go in the discussion, and "Resolve thread" resolves it), other notes are comments, and there are no review bodies.
 
 ## Development
 

@@ -9,11 +9,11 @@ Work through a pull request's review feedback in rounds with the human. You deci
 
 **The replies are the human's.** You draft them, but only text the human approved in the app is posted, and `APP post` posts it from the app's saved state, byte for byte. Never write to a reviewer any other way, never edit approved text, and never resolve threads yourself; `APP post` resolves only the ones the human marked to resolve.
 
-The app lives next to this file. Below, `APP` means `node <this skill's directory>/app/cli.mjs`. Run it from the repository root. It needs Node 20+ and an authenticated `gh`; if either is missing, stop and say so.
+The app lives next to this file. Below, `APP` means `node <this skill's directory>/app/cli.mjs`. Run it from the repository root. It needs Node 20+ and an authenticated `gh`, or `glab` for a GitLab merge request; if either is missing, stop and say so.
 
 ## Steps
 
-1. **Gather the feedback.** Run `APP feedback` (add `--pr <number|url>` if the PR isn't the current branch's). It prints JSON with the PR, its unresolved inline `threads`, top-level `comments`, and `reviews` that have a body, each with the `commentId` and `lastSeenCommentId` the drafts file needs. If there is no PR, stop and tell the human. Skip bot output (CI, coverage, deploy previews) unless it asks for something a person would. Make sure the working tree is on the PR's branch and has no unrelated changes; if not, stop and ask.
+1. **Gather the feedback.** Run `APP feedback` (add `--pr <number|url>` if the PR isn't the current branch's). It prints JSON with the PR, its unresolved inline `threads`, top-level `comments`, and `reviews` that have a body, each with the `commentId` and `lastSeenCommentId` the drafts file needs. For a GitLab merge request (a `/-/merge_requests/` URL, or an `origin` remote on GitLab) the `pr` has `"provider": "gitlab"`; copy it into the drafts file. If there is no PR, stop and tell the human. Skip bot output (CI, coverage, deploy previews) unless it asks for something a person would. Make sure the working tree is on the PR's branch and has no unrelated changes; if not, stop and ask.
 
 2. **Evaluate each item with rigor, not performed agreement.** If a `receiving-code-review` skill is available, use it. For each item decide: implement, decline with a clear technical reason, needs clarification, or just acknowledge. A suggestion can be wrong or rest on a misunderstanding; check it against the actual code before acting. Ask the human up front only when you can't make a sound call without them, such as two reviewers asking for opposite things. Otherwise decide and let the app be where they disagree.
 
